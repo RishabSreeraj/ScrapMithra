@@ -1,0 +1,2729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScrapMithra — Your Scrap. Our Responsibility.</title>
+  <meta name="description" content="ScrapMithra connects you with trusted scrap collectors for convenient doorstep pickup, transparent market rates and instant payment. Turn your scrap into value." />
+  <meta name="keywords" content="scrap, recycling, kabadiwala, scrap collector, sell scrap, eco-friendly, waste management, India" />
+  <meta property="og:title" content="ScrapMithra — Your Scrap. Our Responsibility." />
+  <meta property="og:description" content="Turn your scrap into value with doorstep pickup, transparent pricing, and digital payments." />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & ReactDOM CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: { 50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d' },
+            mint: { 50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488' },
+            eco: { bg:'#f0fdf4', card:'#ffffff', border:'#bbf7d0' }
+          },
+          animation: {
+            'fade-in':'fadeIn 0.5s ease-out','slide-up':'slideUp 0.5s ease-out',
+            'counter':'counter 2s ease-out','pulse-slow':'pulse 3s infinite',
+            'float':'float 3s ease-in-out infinite'
+          },
+          keyframes: {
+            fadeIn:{from:{opacity:'0'},to:{opacity:'1'}},
+            slideUp:{from:{opacity:'0',transform:'translateY(20px)'},to:{opacity:'1',transform:'translateY(0)'}},
+            float:{
+              '0%,100%':{transform:'translateY(0)'},
+              '50%':{transform:'translateY(-8px)'}
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f9fafb; color: #111827; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 3px; }
+    .gradient-hero { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 40%, #bbf7d0 100%); }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(22,163,74,0.12); }
+    .btn-primary { transition: all 0.2s ease; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(22,163,74,0.3); }
+    .nav-link { position: relative; }
+    .nav-link::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:#16a34a; transition: width 0.3s ease; }
+    .nav-link:hover::after { width:100%; }
+    .step-active { background: linear-gradient(135deg, #16a34a, #22c55e); }
+    .ticker-wrap { overflow: hidden; }
+    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .ticker-inner { display:inline-flex; animation: ticker 30s linear infinite; }
+    .rate-card-up { border-left: 4px solid #22c55e; }
+    .rate-card-down { border-left: 4px solid #ef4444; }
+    .rate-card-stable { border-left: 4px solid #94a3b8; }
+    @keyframes countUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    .count-animate { animation: countUp 0.6s ease-out forwards; }
+    .glass { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .demo-badge { background: linear-gradient(90deg, #16a34a, #22c55e); }
+    .timeline-line { position:absolute; left:20px; top:0; bottom:0; width:2px; background: linear-gradient(to bottom, #22c55e, #bbf7d0); }
+    .section-divider { width:60px; height:4px; background: linear-gradient(90deg,#16a34a,#4ade80); border-radius:2px; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,0.1); }
+    .mobile-bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:50; background:white; border-top:1px solid #bbf7d0; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+    @media(min-width:768px){ .mobile-bottom-nav { display:none!important; } }
+    .page { min-height: 100vh; }
+    .fade-enter { animation: fadeIn 0.3s ease-out; }
+    .progress-bar { background: linear-gradient(90deg, #16a34a, #4ade80); }
+    .eco-circle { background: conic-gradient(#22c55e var(--pct), #e5e7eb var(--pct)); }
+    .pattern-bg { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2316a34a' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+    .hero-illustration { animation: float 4s ease-in-out infinite; }
+    .rotating { animation: spin 8s linear infinite; }
+    @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .check-animate { animation: fadeIn 0.3s ease; }
+    select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; background-size:16px; padding-right:40px!important; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">// ============================================================
+// SCRAPMITHRA — Complete Frontend Application
+// React + Tailwind CSS (CDN) | Demo Mode
+// ============================================================
+
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+// ─────────────────────────────────────────────
+// MOCK DATA LAYER — Replace with API calls later
+// ─────────────────────────────────────────────
+
+const SCRAP_RATES = [
+  // Paper
+  { id:'p1', name:'Newspaper', category:'Paper', price:14, unit:'kg', changePercentage:1.2, changeDir:'up', icon:'📰', description:'Old newspapers and print media' },
+  { id:'p2', name:'Books & Magazines', category:'Paper', price:12, unit:'kg', changePercentage:0.5, changeDir:'stable', icon:'📚', description:'Used books and magazines' },
+  { id:'p3', name:'Office Paper', category:'Paper', price:15, unit:'kg', changePercentage:2.1, changeDir:'up', icon:'📄', description:'White office and printing paper' },
+  { id:'p4', name:'Kraft Paper', category:'Paper', price:10, unit:'kg', changePercentage:0.8, changeDir:'down', icon:'🗒️', description:'Brown kraft and packaging paper' },
+  // Cardboard
+  { id:'c1', name:'Corrugated Cardboard', category:'Cardboard', price:8, unit:'kg', changePercentage:1.5, changeDir:'up', icon:'📦', description:'Double-layer corrugated boxes' },
+  { id:'c2', name:'Carton Boxes', category:'Cardboard', price:7, unit:'kg', changePercentage:0.3, changeDir:'stable', icon:'🗃️', description:'Single-layer cartons and boxes' },
+  { id:'c3', name:'Duplex Board', category:'Cardboard', price:9, unit:'kg', changePercentage:1.1, changeDir:'up', icon:'📋', description:'Duplex and grey board' },
+  // Metal
+  { id:'m1', name:'Iron', category:'Metal', price:30, unit:'kg', changePercentage:1.2, changeDir:'down', icon:'⚙️', description:'Iron scrap, rods, sheets' },
+  { id:'m2', name:'Steel', category:'Metal', price:45, unit:'kg', changePercentage:0.7, changeDir:'stable', icon:'🔩', description:'Stainless steel items' },
+  { id:'m3', name:'Aluminium', category:'Metal', price:160, unit:'kg', changePercentage:3.1, changeDir:'up', icon:'🥤', description:'Aluminium cans, sheets, frames' },
+  { id:'m4', name:'Brass', category:'Metal', price:400, unit:'kg', changePercentage:1.8, changeDir:'up', icon:'🔑', description:'Brass fittings and components' },
+  { id:'m5', name:'Copper', category:'Metal', price:750, unit:'kg', changePercentage:2.4, changeDir:'up', icon:'🔌', description:'Copper wire, pipes, sheets' },
+  { id:'m6', name:'Lead', category:'Metal', price:120, unit:'kg', changePercentage:0.9, changeDir:'down', icon:'🔋', description:'Lead batteries and weights' },
+  // Plastic
+  { id:'pl1', name:'PET Bottles', category:'Plastic', price:10, unit:'kg', changePercentage:0.5, changeDir:'stable', icon:'🍶', description:'Clear PET water/soda bottles' },
+  { id:'pl2', name:'Mixed Plastic', category:'Plastic', price:8, unit:'kg', changePercentage:1.0, changeDir:'down', icon:'🪣', description:'HDPE, LDPE, PP containers' },
+  { id:'pl3', name:'Hard Plastic', category:'Plastic', price:12, unit:'kg', changePercentage:0.7, changeDir:'up', icon:'🧱', description:'Rigid plastic items and cases' },
+  // E-Waste
+  { id:'e1', name:'Laptop', category:'E-Waste', price:500, unit:'piece', changePercentage:2.5, changeDir:'up', icon:'💻', description:'Old laptops and notebooks' },
+  { id:'e2', name:'Smartphone', category:'E-Waste', price:100, unit:'piece', changePercentage:1.1, changeDir:'stable', icon:'📱', description:'Old mobile phones' },
+  { id:'e3', name:'Desktop CPU', category:'E-Waste', price:250, unit:'piece', changePercentage:0.8, changeDir:'up', icon:'🖥️', description:'Desktop computer CPU units' },
+  { id:'e4', name:'Printer', category:'E-Waste', price:200, unit:'piece', changePercentage:1.3, changeDir:'stable', icon:'🖨️', description:'Inkjet and laser printers' },
+  { id:'e5', name:'Cables & Wires', category:'E-Waste', price:50, unit:'kg', changePercentage:1.9, changeDir:'up', icon:'🔌', description:'Mixed electronic cables' },
+  { id:'e6', name:'CRT Monitor', category:'E-Waste', price:80, unit:'piece', changePercentage:0.4, changeDir:'down', icon:'📺', description:'Old CRT monitors and TVs' },
+  // Appliances
+  { id:'a1', name:'Refrigerator', category:'Appliances', price:1000, unit:'piece', changePercentage:1.5, changeDir:'up', icon:'🧊', description:'Working or non-working fridges' },
+  { id:'a2', name:'Washing Machine', category:'Appliances', price:800, unit:'piece', changePercentage:0.6, changeDir:'stable', icon:'🌀', description:'Top-load and front-load machines' },
+  { id:'a3', name:'Microwave', category:'Appliances', price:250, unit:'piece', changePercentage:1.2, changeDir:'up', icon:'📡', description:'Microwave ovens' },
+  { id:'a4', name:'Air Conditioner', category:'Appliances', price:1200, unit:'piece', changePercentage:2.0, changeDir:'up', icon:'❄️', description:'Window and split ACs' },
+  { id:'a5', name:'Ceiling Fan', category:'Appliances', price:150, unit:'piece', changePercentage:0.5, changeDir:'stable', icon:'💨', description:'Old ceiling fans' },
+  // Other
+  { id:'o1', name:'Glass Bottles', category:'Other', price:3, unit:'kg', changePercentage:0.2, changeDir:'stable', icon:'🍾', description:'Glass bottles and jars' },
+  { id:'o2', name:'Rubber', category:'Other', price:6, unit:'kg', changePercentage:0.8, changeDir:'down', icon:'🛞', description:'Rubber tyres and items' },
+  { id:'o3', name:'Battery', category:'Other', price:40, unit:'piece', changePercentage:1.4, changeDir:'up', icon:'🔋', description:'Car and inverter batteries' },
+];
+
+const CATEGORIES = ['All', 'Paper', 'Cardboard', 'Metal', 'Plastic', 'E-Waste', 'Appliances', 'Other'];
+
+const MOCK_COLLECTORS = [
+  { id:'col1', name:'Arun Kumar', rating:4.8, reviews:312, distance:'1.2 km', available:true, materials:['Paper','Cardboard','Metal','Plastic'], vehicle:'ScrapMithra Van', phone:'+91 98765 43210', image:'AK', color:'#16a34a' },
+  { id:'col2', name:'GreenCycle Collectors', rating:4.7, reviews:241, distance:'2.4 km', available:true, materials:['Metal','E-Waste','Appliances'], vehicle:'Collection Truck', phone:'+91 98765 12345', image:'GC', color:'#0d9488' },
+  { id:'col3', name:'EcoHaul Services', rating:4.5, reviews:178, distance:'3.1 km', available:true, materials:['Paper','Cardboard','Plastic','Other'], vehicle:'Two-Wheeler', phone:'+91 91234 56789', image:'EH', color:'#ca8a04' },
+  { id:'col4', name:'Rajan Waste Solutions', rating:4.6, reviews:203, distance:'3.8 km', available:false, materials:['Metal','Appliances','E-Waste'], vehicle:'Collection Van', phone:'+91 87654 32100', image:'RW', color:'#7c3aed' },
+];
+
+const MOCK_PICKUPS = [
+  { id:'SM-2026-001245', date:'2026-09-12', time:'9 AM – 11 AM', collector:'Arun Kumar', status:'Scheduled', scrap:[{name:'Cardboard',qty:10,unit:'kg'},{name:'Iron',qty:15,unit:'kg'}], estValue:530, address:'12, Green Park Colony, Thiruvananthapuram, Kerala - 695001' },
+  { id:'SM-2026-001198', date:'2026-09-10', time:'11 AM – 1 PM', collector:'GreenCycle Collectors', status:'Completed', scrap:[{name:'Paper',qty:15,unit:'kg'},{name:'Aluminium',qty:3,unit:'kg'}], estValue:690, address:'45, MG Road, Kochi, Kerala - 682011' },
+  { id:'SM-2026-001102', date:'2026-09-05', time:'2 PM – 4 PM', collector:'Arun Kumar', status:'Completed', scrap:[{name:'Iron',qty:8,unit:'kg'}], estValue:240, address:'12, Green Park Colony, Thiruvananthapuram, Kerala - 695001' },
+];
+
+const MOCK_HISTORY = [
+  { date:'10 Sep 2026', id:'SM-2026-001198', scrap:'Paper + Aluminium', weight:'18 kg', amount:'₹690', status:'Completed' },
+  { date:'05 Sep 2026', id:'SM-2026-001102', scrap:'Iron', weight:'8 kg', amount:'₹240', status:'Completed' },
+  { date:'28 Aug 2026', id:'SM-2026-001055', scrap:'Cardboard + Plastic', weight:'22 kg', amount:'₹334', status:'Completed' },
+  { date:'15 Aug 2026', id:'SM-2026-000978', scrap:'Copper Wire', weight:'3 kg', amount:'₹2,250', status:'Completed' },
+  { date:'02 Aug 2026', id:'SM-2026-000891', scrap:'Laptop + Mobile', weight:'2 pieces', amount:'₹600', status:'Completed' },
+];
+
+const MOCK_REQUESTS = [
+  { id:'SM-2026-001250', customer:'Priya Nair', location:'Palarivattom, Kochi', scrap:'Paper, Cardboard', qty:'~25 kg', estValue:'₹315', time:'9 AM – 11 AM', date:'11 Sep' },
+  { id:'SM-2026-001249', customer:'Suresh Menon', location:'Kazhakuttom, TVM', scrap:'Aluminium + Steel', qty:'~12 kg', estValue:'₹2,460', time:'2 PM – 4 PM', date:'11 Sep' },
+  { id:'SM-2026-001248', customer:'Anjali Sharma', location:'Edapally, Kochi', scrap:'Refrigerator (old)', qty:'1 piece', estValue:'₹1,000', time:'11 AM – 1 PM', date:'12 Sep' },
+];
+
+const ECO_RATES = {
+  Paper: { co2:1.1, water:10, energy:4, trees:0.006 },
+  Cardboard: { co2:0.9, water:8, energy:3, trees:0.005 },
+  Metal: { co2:1.8, water:15, energy:8, trees:0 },
+  Plastic: { co2:2.1, water:12, energy:6, trees:0 },
+  'E-Waste': { co2:0.5, water:5, energy:2, trees:0 },
+  Appliances: { co2:3.0, water:20, energy:12, trees:0 },
+  Other: { co2:0.8, water:6, energy:3, trees:0 },
+};
+
+const LOCATIONS = ['Kerala', 'Tamil Nadu', 'Karnataka', 'Delhi', 'Mumbai', 'Hyderabad', 'Pune'];
+
+const FAQS = [
+  { q:'What materials can I sell through ScrapMithra?', a:'ScrapMithra accepts a wide range of recyclables including paper, cardboard, metals (iron, steel, aluminium, copper, brass), plastics, e-waste (laptops, phones, cables), and large appliances. Check our Services page for the complete list.' },
+  { q:'How are scrap prices determined?', a:'Scrap prices are based on current market conditions, material quality, and regional demand. Our indicative rates are updated regularly. The final price is determined after physical inspection and digital weighing at the time of pickup.' },
+  { q:'Are the rates real-time?', a:'Our rates are updated regularly to reflect market trends. They serve as indicative values. The final payment is calculated after the collector weighs your scrap digitally. We always show you the rate before confirming.' },
+  { q:'Is doorstep pickup free?', a:'Yes! Pickup is completely free. ScrapMithra does not charge any service fee for collection. You receive the full scrap value directly.' },
+  { q:'How is scrap weighed?', a:'Our collectors use calibrated digital weighing machines at your doorstep. The weight is recorded digitally and shared with you instantly for complete transparency.' },
+  { q:'How do I receive payment?', a:'You can receive payment via UPI (GPay, PhonePe, Paytm), cash on the spot, or direct bank transfer. Choose your preferred method when confirming your pickup.' },
+  { q:'Can I schedule bulk pickups for my business?', a:'Absolutely! ScrapMithra supports both residential and commercial pickups. For bulk or recurring pickups, contact us at support@scrapmithra.in for a customized arrangement.' },
+  { q:'Can businesses use ScrapMithra?', a:'Yes. Offices, factories, shops, and institutions can all use ScrapMithra. We offer bulk pickup scheduling, transparent invoicing, and digital transaction records for businesses.' },
+  { q:'What happens to collected scrap?', a:'Collected scrap is sorted, processed, and sent to authorized recycling facilities. This ensures materials re-enter the circular economy rather than ending up in landfills.' },
+  { q:'Can I become a ScrapMithra collector?', a:'Yes! If you are a registered scrap collector or waste management professional, apply through our Collector Partner Program. Visit the About page or contact us for details.' },
+];
+
+const TESTIMONIALS = [
+  { name:'Meera Krishnan', location:'Kochi, Kerala', role:'Homemaker', text:'Booking a pickup was incredibly simple. I knew the estimated rate before the collector arrived. The entire process was transparent and the digital weighing gave me complete confidence.', rating:5, avatar:'MK' },
+  { name:'Vijay Shankar', location:'Bengaluru, Karnataka', role:'Software Engineer', text:'Finally, a simple way to sell old newspapers, cardboard and electronics without hunting for a local collector. The app is super clean and the collector arrived on time!', rating:5, avatar:'VS' },
+  { name:'Anita Pillai', location:'Thiruvananthapuram, Kerala', role:'School Teacher', text:'The digital weighing and transparent payment made the entire process trustworthy. I also love seeing my environmental impact. Highly recommend ScrapMithra!', rating:5, avatar:'AP' },
+  { name:'Rajan Thomas', location:'Chennai, Tamil Nadu', role:'Small Business Owner', text:'We switched our office scrap to ScrapMithra. The bulk pickup option and digital records are exactly what we needed. Saves us time and helps the environment.', rating:5, avatar:'RT' },
+];
+
+// ─────────────────────────────────────────────
+// SVG ICONS (Inline, no external dependency)
+// ─────────────────────────────────────────────
+const Icon = ({ name, size=20, color='currentColor', className='' }) => {
+  const icons = {
+    leaf: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>,
+    recycle: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 7.196 9.5 3.1 10.598"/><path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"/><path d="m13.378 9.633 4.096 1.098 1.097-4.096"/></svg>,
+    trending_up: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>,
+    trending_down: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>,
+    truck: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect width="9" height="11" x="11" y="11" rx="1"/><circle cx="17" cy="20" r="2"/><circle cx="7" cy="20" r="2"/></svg>,
+    check: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="20 6 9 17 4 12"/></svg>,
+    x: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+    menu: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>,
+    star: <svg width={size} height={size} viewBox="0 0 24 24" fill={color} stroke={color} strokeWidth="1" className={className}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+    map_pin: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>,
+    calendar: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+    clock: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+    phone: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.5 2.23h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.06 6.06l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
+    message: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>,
+    shield: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+    dollar: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+    home: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+    bar_chart: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>,
+    user: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+    users: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    settings: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
+    arrow_right: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
+    search: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
+    bell: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>,
+    edit: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+    trash: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+    plus: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+    zap: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+    globe: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+    info: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>,
+    weight: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="2" x2="12" y2="6"/><path d="M12 6a4 4 0 1 0 4 4"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 14v-2a6 6 0 0 1 12 0v2"/></svg>,
+    package: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>,
+    credit_card: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="22" height="16" x="1" y="4" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,
+    navigation: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>,
+    award: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>,
+    chevron_down: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="6 9 12 15 18 9"/></svg>,
+    chevron_right: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"/></svg>,
+    tree: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76l1 4.12a1 1 0 0 1-.97 1.24H9.98a1 1 0 0 1-.97-.74L8 13"/></svg>,
+    droplets: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></svg>,
+    activity: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
+    logout: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>,
+    check_circle: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+  };
+  return icons[name] || <span>?</span>;
+};
+
+// ─────────────────────────────────────────────
+// LOGO COMPONENT
+// ─────────────────────────────────────────────
+const Logo = ({ size = 'md', white = false }) => {
+  const textColor = white ? 'text-white' : 'text-gray-900';
+  const sizes = { sm: { icon: 28, text: 'text-lg' }, md: { icon: 36, text: 'text-xl' }, lg: { icon: 48, text: 'text-3xl' } };
+  const s = sizes[size] || sizes.md;
+  return (
+    <div className="flex items-center gap-2">
+      <div className="relative flex-shrink-0">
+        <svg width={s.icon} height={s.icon} viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="24" r="24" fill={white ? 'rgba(255,255,255,0.15)' : '#f0fdf4'} />
+          {/* Circular arrows */}
+          <path d="M24 10 A14 14 0 0 1 38 24" stroke="#16a34a" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+          <path d="M38 24 A14 14 0 0 1 24 38" stroke="#22c55e" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+          <path d="M24 38 A14 14 0 0 1 10 24" stroke="#4ade80" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+          <path d="M10 24 A14 14 0 0 1 24 10" stroke="#86efac" strokeWidth="3.5" strokeLinecap="round" fill="none"/>
+          {/* Arrow heads */}
+          <polygon points="24,7 27,12 21,12" fill="#16a34a"/>
+          {/* Leaf in center */}
+          <path d="M24 18 Q28 18 28 22 Q28 28 22 28 Q22 22 24 18Z" fill="#16a34a"/>
+          <line x1="24" y1="28" x2="24" y2="32" stroke="#16a34a" strokeWidth="2" strokeLinecap="round"/>
+          {/* S letter hint */}
+          <text x="20" y="27" fontSize="9" fontWeight="800" fill="white" fontFamily="Inter,sans-serif">S</text>
+        </svg>
+      </div>
+      <div>
+        <span className={`font-bold ${s.text} ${textColor} tracking-tight`}>
+          Scrap<span className="text-primary-600">Mithra</span>
+        </span>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// DEMO BANNER
+// ─────────────────────────────────────────────
+const DemoBanner = () => (
+  <div className="demo-badge text-white text-center py-2 px-4 text-sm font-medium">
+    🟢 <strong>Demo Mode</strong> — Explore the complete ScrapMithra experience. All flows are functional with mock data.
+  </div>
+);
+
+// ─────────────────────────────────────────────
+// NAVBAR
+// ─────────────────────────────────────────────
+const Navbar = ({ currentPage, setPage, isLoggedIn, setIsLoggedIn, userRole, setUserRole }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (searchQuery.length > 1) {
+      const q = searchQuery.toLowerCase();
+      const results = SCRAP_RATES.filter(r => r.name.toLowerCase().includes(q) || r.category.toLowerCase().includes(q)).slice(0, 5);
+      setSearchResults(results);
+    } else { setSearchResults([]); }
+  }, [searchQuery]);
+
+  const navLinks = [
+    { label:'Home', page:'home' },
+    { label:'Scrap Rates', page:'rates' },
+    { label:'How It Works', page:'howitworks' },
+    { label:'Services', page:'services' },
+    { label:'Impact', page:'impact' },
+    { label:'About', page:'about' },
+  ];
+
+  const notifications = [
+    { icon:'🎉', text:'Your pickup SM-2026-001245 is confirmed!', time:'2 min ago', read:false },
+    { icon:'🚛', text:'Collector Arun is on the way.', time:'15 min ago', read:false },
+    { icon:'📈', text:'Copper rate increased by 2.4% today.', time:'1 hr ago', read:true },
+    { icon:'✅', text:'₹690 paid for pickup SM-2026-001198.', time:'Yesterday', read:true },
+  ];
+
+  return (
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-green-100' : 'bg-white/90 backdrop-blur-sm'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <button onClick={() => setPage('home')} className="flex-shrink-0">
+            <Logo size="md" />
+          </button>
+
+          {/* Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map(link => (
+              <button key={link.page} onClick={() => setPage(link.page)}
+                className={`nav-link px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${currentPage === link.page ? 'text-primary-600 bg-primary-50' : 'text-gray-600 hover:text-primary-600 hover:bg-primary-50'}`}>
+                {link.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Right actions */}
+          <div className="hidden lg:flex items-center gap-3">
+            {/* Search */}
+            <div className="relative">
+              <button onClick={() => setSearchOpen(!searchOpen)} className="p-2 rounded-lg text-gray-500 hover:text-primary-600 hover:bg-primary-50 transition-colors">
+                <Icon name="search" size={18} />
+              </button>
+              {searchOpen && (
+                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-xl border border-green-100 p-3 z-50">
+                  <input autoFocus value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:border-primary-500"
+                    placeholder="Search scrap rates..." />
+                  {searchResults.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {searchResults.map(r => (
+                        <div key={r.id} className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-primary-50 cursor-pointer" onClick={() => { setPage('rates'); setSearchOpen(false); setSearchQuery(''); }}>
+                          <span className="text-sm text-gray-700">{r.icon} {r.name}</span>
+                          <div className="text-right">
+                            <div className="text-sm font-semibold text-primary-600">₹{r.price}/{r.unit}</div>
+                            <div className="text-xs text-gray-400">{r.category}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {searchQuery.length > 1 && searchResults.length === 0 && (
+                    <p className="text-sm text-gray-400 text-center py-3">No results found</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Notifications */}
+            {isLoggedIn && (
+              <div className="relative">
+                <button onClick={() => setNotifOpen(!notifOpen)} className="p-2 rounded-lg text-gray-500 hover:text-primary-600 hover:bg-primary-50 relative">
+                  <Icon name="bell" size={18} />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                {notifOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-xl border border-green-100 overflow-hidden z-50">
+                    <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                      <span className="font-semibold text-gray-800">Notifications</span>
+                      <span className="text-xs text-primary-600 cursor-pointer">Mark all read</span>
+                    </div>
+                    <div className="divide-y divide-gray-50 max-h-72 overflow-y-auto">
+                      {notifications.map((n, i) => (
+                        <div key={i} className={`px-4 py-3 flex gap-3 items-start ${!n.read ? 'bg-primary-50/40' : ''}`}>
+                          <span className="text-lg flex-shrink-0">{n.icon}</span>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm ${!n.read ? 'font-medium text-gray-800' : 'text-gray-600'}`}>{n.text}</p>
+                            <p className="text-xs text-gray-400 mt-0.5">{n.time}</p>
+                          </div>
+                          {!n.read && <span className="w-2 h-2 bg-primary-500 rounded-full mt-1 flex-shrink-0"></span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {isLoggedIn ? (
+              <div className="flex items-center gap-2">
+                <button onClick={() => setPage(userRole === 'admin' ? 'admin' : userRole === 'collector' ? 'collector' : 'dashboard')}
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl border border-green-200 hover:bg-primary-50 transition-colors">
+                  <div className="w-7 h-7 rounded-full bg-primary-600 flex items-center justify-center text-white text-xs font-bold">
+                    {userRole === 'admin' ? 'AD' : userRole === 'collector' ? 'CL' : 'PK'}
+                  </div>
+                  <span className="text-sm font-medium text-gray-700">{userRole === 'admin' ? 'Admin' : userRole === 'collector' ? 'Arun' : 'Priya'}</span>
+                </button>
+                <button onClick={() => { setIsLoggedIn(false); setPage('home'); }}
+                  className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors">
+                  <Icon name="logout" size={16} />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button onClick={() => { setPage('login'); }} className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-xl hover:bg-primary-50 transition-colors">Login</button>
+                <button onClick={() => setPage('booking')} className="btn-primary px-4 py-2 text-sm font-semibold bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors shadow-sm">
+                  Book Pickup
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile hamburger */}
+          <div className="lg:hidden flex items-center gap-2">
+            {isLoggedIn && (
+              <button onClick={() => setNotifOpen(!notifOpen)} className="p-2 text-gray-500 relative">
+                <Icon name="bell" size={20} />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              </button>
+            )}
+            <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 rounded-lg text-gray-600 hover:bg-primary-50">
+              {menuOpen ? <Icon name="x" size={22} /> : <Icon name="menu" size={22} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {menuOpen && (
+        <div className="lg:hidden bg-white border-t border-green-100 shadow-lg">
+          <div className="px-4 py-3 space-y-1">
+            {navLinks.map(link => (
+              <button key={link.page} onClick={() => { setPage(link.page); setMenuOpen(false); }}
+                className={`w-full text-left px-3 py-3 rounded-xl text-sm font-medium transition-colors ${currentPage === link.page ? 'text-primary-600 bg-primary-50' : 'text-gray-700 hover:bg-primary-50'}`}>
+                {link.label}
+              </button>
+            ))}
+            <div className="pt-3 border-t border-gray-100 space-y-2">
+              {isLoggedIn ? (
+                <>
+                  <button onClick={() => { setPage(userRole === 'admin' ? 'admin' : userRole === 'collector' ? 'collector' : 'dashboard'); setMenuOpen(false); }}
+                    className="w-full text-left px-3 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-primary-50">
+                    My Dashboard
+                  </button>
+                  <button onClick={() => { setIsLoggedIn(false); setPage('home'); setMenuOpen(false); }}
+                    className="w-full text-left px-3 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => { setPage('login'); setMenuOpen(false); }} className="w-full px-4 py-3 text-sm font-medium text-gray-700 rounded-xl border border-gray-200">Login</button>
+                  <button onClick={() => { setPage('booking'); setMenuOpen(false); }} className="w-full px-4 py-3 text-sm font-semibold bg-primary-600 text-white rounded-xl">
+                    📦 Book Pickup
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+// ─────────────────────────────────────────────
+// RATE TICKER
+// ─────────────────────────────────────────────
+const RateTicker = () => {
+  const topRates = SCRAP_RATES.filter(r => ['Copper','Aluminium','Iron','Steel','Brass','Newspaper','PET Bottles'].includes(r.name));
+  const items = [...topRates, ...topRates];
+  return (
+    <div className="bg-primary-900 text-white py-2 overflow-hidden">
+      <div className="ticker-wrap">
+        <div className="ticker-inner">
+          {items.map((r, i) => (
+            <div key={i} className="flex items-center gap-2 px-6 whitespace-nowrap">
+              <span className="text-green-300 text-sm">{r.icon}</span>
+              <span className="text-sm font-medium">{r.name}</span>
+              <span className="text-white font-bold">₹{r.price}/{r.unit}</span>
+              <span className={`text-xs font-medium flex items-center gap-0.5 ${r.changeDir === 'up' ? 'text-green-400' : r.changeDir === 'down' ? 'text-red-400' : 'text-gray-400'}`}>
+                {r.changeDir === 'up' ? '↑' : r.changeDir === 'down' ? '↓' : '→'} {r.changePercentage}%
+              </span>
+              <span className="text-primary-700 mx-2">|</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// ANIMATED COUNTER
+// ─────────────────────────────────────────────
+const AnimatedCounter = ({ target, prefix='', suffix='', duration=2000 }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const animated = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !animated.current) {
+        animated.current = true;
+        const start = Date.now();
+        const timer = setInterval(() => {
+          const elapsed = Date.now() - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          setCount(Math.floor(eased * target));
+          if (progress >= 1) clearInterval(timer);
+        }, 16);
+      }
+    }, { threshold: 0.3 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target, duration]);
+
+  return <span ref={ref}>{prefix}{count.toLocaleString('en-IN')}{suffix}</span>;
+};
+
+// ─────────────────────────────────────────────
+// HERO SECTION
+// ─────────────────────────────────────────────
+const HeroSection = ({ setPage }) => (
+  <section className="gradient-hero pattern-bg pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+        {/* Left content */}
+        <div className="text-center lg:text-left animate-fade-in">
+          <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-green-200 mb-6">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span className="text-sm font-medium text-green-700">Kerala's Trusted Scrap Platform</span>
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+            Turn Your Scrap<br />
+            <span className="text-primary-600">Into Value.</span>
+          </h1>
+          <p className="text-lg text-gray-600 max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
+            ScrapMithra connects you with trusted scrap collectors for convenient doorstep pickup, transparent market rates and instant payment.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <button onClick={() => setPage('booking')} className="btn-primary px-8 py-4 bg-primary-600 text-white font-semibold rounded-2xl text-base shadow-lg hover:bg-primary-700 transition-all flex items-center justify-center gap-2">
+              <Icon name="truck" size={20} /> Book a Pickup
+            </button>
+            <button onClick={() => setPage('rates')} className="px-8 py-4 bg-white text-primary-700 font-semibold rounded-2xl text-base border-2 border-primary-200 hover:border-primary-400 hover:bg-primary-50 transition-all flex items-center justify-center gap-2">
+              <Icon name="bar_chart" size={20} /> Check Scrap Rates
+            </button>
+          </div>
+          {/* Stats */}
+          <div className="mt-10 grid grid-cols-3 gap-4">
+            {[
+              { val:'8,420+', label:'Happy Customers' },
+              { val:'320+', label:'Verified Collectors' },
+              { val:'128 T+', label:'Scrap Recycled' },
+            ].map((s, i) => (
+              <div key={i} className="text-center lg:text-left">
+                <div className="text-2xl font-bold text-primary-700">{s.val}</div>
+                <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right illustration */}
+        <div className="flex justify-center lg:justify-end">
+          <div className="relative w-full max-w-lg">
+            {/* Main illustration card */}
+            <div className="hero-illustration bg-white rounded-3xl shadow-2xl p-6 border border-green-100">
+              {/* Circular process visual */}
+              <div className="text-center mb-4">
+                <div className="text-2xl font-bold text-gray-800 mb-1">Your Recycling Journey</div>
+                <div className="text-sm text-gray-500">Simple. Transparent. Rewarding.</div>
+              </div>
+              <div className="grid grid-cols-3 gap-3 mb-6">
+                {[
+                  { emoji:'📰', label:'Paper', val:'₹14/kg', color:'#dcfce7' },
+                  { emoji:'⚙️', label:'Metal', val:'₹30/kg', color:'#dbeafe' },
+                  { emoji:'💻', label:'E-Waste', val:'₹500/pc', color:'#fce7f3' },
+                  { emoji:'📦', label:'Cardboard', val:'₹8/kg', color:'#fef9c3' },
+                  { emoji:'🥤', label:'Aluminium', val:'₹160/kg', color:'#ede9fe' },
+                  { emoji:'🍶', label:'Plastic', val:'₹10/kg', color:'#ffedd5' },
+                ].map((item, i) => (
+                  <div key={i} className="rounded-2xl p-3 text-center" style={{background:item.color}}>
+                    <div className="text-2xl mb-1">{item.emoji}</div>
+                    <div className="text-xs font-semibold text-gray-700">{item.label}</div>
+                    <div className="text-xs font-bold text-primary-700 mt-0.5">{item.val}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-primary-600 rounded-2xl p-4 text-white text-center">
+                <div className="text-sm font-medium mb-1">⚡ Instant Value Estimate</div>
+                <div className="text-3xl font-bold">₹ 2,840</div>
+                <div className="text-xs text-green-200 mt-1">Based on your selected scrap items</div>
+              </div>
+            </div>
+
+            {/* Floating badges */}
+            <div className="absolute -top-4 -left-4 bg-white rounded-2xl shadow-lg px-4 py-3 border border-green-100 flex items-center gap-2 animate-pulse-slow">
+              <span className="text-xl">🌱</span>
+              <div>
+                <div className="text-xs font-bold text-primary-600">Eco Impact</div>
+                <div className="text-xs text-gray-500">3.2 trees saved!</div>
+              </div>
+            </div>
+            <div className="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-lg px-4 py-3 border border-green-100 flex items-center gap-2">
+              <span className="text-xl">🚛</span>
+              <div>
+                <div className="text-xs font-bold text-gray-800">Pickup Booked!</div>
+                <div className="text-xs text-gray-500">Collector ETA: 15 min</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// ─────────────────────────────────────────────
+// RATE PREVIEW SECTION (Homepage)
+// ─────────────────────────────────────────────
+const RatePreviewSection = ({ setPage }) => {
+  const [activeTab, setActiveTab] = useState('Metal');
+  const tabs = ['Metal', 'Paper', 'Plastic', 'E-Waste', 'Appliances'];
+  const filtered = SCRAP_RATES.filter(r => r.category === activeTab);
+
+  return (
+    <section className="py-16 md:py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <div className="section-divider mx-auto mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Today's Scrap Market Rates</h2>
+          <p className="text-gray-500 max-w-xl mx-auto">Know the value of your scrap before you sell. Updated daily.</p>
+          <div className="flex items-center justify-center gap-2 mt-3">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span className="text-sm text-gray-500">Last Updated: Today, 10:30 AM</span>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          {tabs.map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${activeTab === tab ? 'bg-primary-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-primary-50 hover:text-primary-600'}`}>
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Rate cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+          {filtered.map(rate => (
+            <div key={rate.id} className={`bg-white rounded-2xl p-4 border border-gray-100 shadow-sm card-hover ${rate.changeDir === 'up' ? 'rate-card-up' : rate.changeDir === 'down' ? 'rate-card-down' : 'rate-card-stable'}`}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-2xl">{rate.icon}</span>
+                <span className={`flex items-center gap-0.5 text-xs font-semibold px-2 py-1 rounded-full ${rate.changeDir === 'up' ? 'bg-green-100 text-green-700' : rate.changeDir === 'down' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>
+                  {rate.changeDir === 'up' ? <Icon name="trending_up" size={12} /> : rate.changeDir === 'down' ? <Icon name="trending_down" size={12} /> : '→'}
+                  {rate.changePercentage}%
+                </span>
+              </div>
+              <div className="text-sm font-medium text-gray-700 mb-1">{rate.name}</div>
+              <div className="text-xl font-bold text-primary-700">₹{rate.price.toLocaleString('en-IN')}</div>
+              <div className="text-xs text-gray-400">per {rate.unit}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-400 max-w-lg text-center sm:text-left">
+            <Icon name="info" size={12} className="inline mr-1" />
+            Indicative rates. Final value may vary depending on material quality, condition, quantity and current market conditions.
+          </p>
+          <button onClick={() => setPage('rates')} className="btn-primary flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-medium rounded-xl text-sm hover:bg-primary-700 transition-all">
+            View All Rates <Icon name="arrow_right" size={16} />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// SCRAP VALUE CALCULATOR
+// ─────────────────────────────────────────────
+const ScrapCalculator = ({ setPage }) => {
+  const [selectedMaterial, setSelectedMaterial] = useState('Copper');
+  const [quantity, setQuantity] = useState(5);
+  const rate = SCRAP_RATES.find(r => r.name === selectedMaterial);
+  const estimated = rate ? rate.price * quantity : 0;
+
+  return (
+    <section className="py-16 md:py-24 bg-primary-50 pattern-bg">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10">
+          <div className="section-divider mx-auto mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Estimate Your Scrap Value</h2>
+          <p className="text-gray-500">Get an instant estimate before booking your pickup.</p>
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-green-100">
+          <div className="grid md:grid-cols-2">
+            {/* Inputs */}
+            <div className="p-8 border-b md:border-b-0 md:border-r border-gray-100">
+              <h3 className="font-semibold text-gray-800 mb-6 text-lg">Select Your Scrap</h3>
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Material</label>
+                  <select value={selectedMaterial} onChange={e => setSelectedMaterial(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white">
+                    {SCRAP_RATES.map(r => <option key={r.id} value={r.name}>{r.icon} {r.name} — ₹{r.price}/{r.unit}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Quantity ({rate?.unit || 'kg'})
+                  </label>
+                  <input type="number" min="0.5" step="0.5" value={quantity} onChange={e => setQuantity(parseFloat(e.target.value) || 0)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm" />
+                  <input type="range" min="1" max="100" value={quantity} onChange={e => setQuantity(parseFloat(e.target.value))}
+                    className="w-full mt-3 accent-green-600" />
+                  <div className="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>1 {rate?.unit}</span><span>100 {rate?.unit}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-6 p-4 bg-primary-50 rounded-2xl">
+                <div className="text-xs text-gray-500 mb-1">Current Rate</div>
+                <div className="text-2xl font-bold text-primary-700">₹{rate?.price || 0} <span className="text-base font-normal text-gray-500">per {rate?.unit}</span></div>
+                <div className={`flex items-center gap-1 text-xs mt-1 font-medium ${rate?.changeDir === 'up' ? 'text-green-600' : rate?.changeDir === 'down' ? 'text-red-500' : 'text-gray-400'}`}>
+                  {rate?.changeDir === 'up' ? '↑' : rate?.changeDir === 'down' ? '↓' : '→'} {rate?.changePercentage}% today
+                </div>
+              </div>
+            </div>
+
+            {/* Result */}
+            <div className="p-8 flex flex-col justify-between">
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-6 text-lg">Estimated Value</h3>
+                <div className="text-center py-8">
+                  <div className="text-6xl font-bold text-primary-600 mb-2">
+                    ₹{estimated.toLocaleString('en-IN')}
+                  </div>
+                  <div className="text-gray-500 text-sm mt-2">
+                    {quantity} {rate?.unit} × ₹{rate?.price} per {rate?.unit}
+                  </div>
+                  <div className="mt-6 p-4 bg-amber-50 rounded-2xl border border-amber-200">
+                    <p className="text-xs text-amber-700">
+                      <Icon name="info" size={12} className="inline mr-1" />
+                      Final amount is determined after physical inspection and digital weighing.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <button onClick={() => setPage('booking')} className="btn-primary w-full py-4 bg-primary-600 text-white font-semibold rounded-2xl text-base hover:bg-primary-700 transition-all flex items-center justify-center gap-2">
+                <Icon name="truck" size={20} /> Book Pickup for ₹{estimated.toLocaleString('en-IN')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// HOW IT WORKS SECTION (Homepage)
+// ─────────────────────────────────────────────
+const HowItWorksSection = ({ setPage }) => {
+  const steps = [
+    { num:'01', emoji:'📋', title:'Select Your Scrap', desc:'Choose the scrap categories and enter estimated quantity.' },
+    { num:'02', emoji:'📍', title:'Enter Pickup Location', desc:'Share your address or use GPS for automatic location detection.' },
+    { num:'03', emoji:'📅', title:'Choose Time Slot', desc:'Pick a convenient date and time slot for your pickup.' },
+    { num:'04', emoji:'🚛', title:'Collector Arrives', desc:'A verified ScrapMithra collector arrives at your doorstep.' },
+    { num:'05', emoji:'⚖️', title:'Scrap Weighed Digitally', desc:'Scrap is weighed with calibrated digital equipment, displayed to you.' },
+    { num:'06', emoji:'💰', title:'Get Paid Instantly', desc:'Receive payment via UPI, cash, or bank transfer immediately.' },
+  ];
+  return (
+    <section className="py-16 md:py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-14">
+          <div className="section-divider mx-auto mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">How ScrapMithra Works</h2>
+          <p className="text-gray-500 max-w-xl mx-auto">From booking to payment — we make scrap selling as easy as ordering food online.</p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {steps.map((step, i) => (
+            <div key={i} className="relative bg-white border border-gray-100 rounded-3xl p-6 shadow-sm card-hover group">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-primary-600 flex items-center justify-center text-white font-bold text-sm group-hover:scale-110 transition-transform">
+                    {step.num}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-2xl mb-2">{step.emoji}</div>
+                  <h3 className="font-bold text-gray-800 mb-2">{step.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
+              {i < steps.length - 1 && (
+                <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-primary-300 text-xl">→</div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-12">
+          <button onClick={() => setPage('booking')} className="btn-primary px-10 py-4 bg-primary-600 text-white font-semibold rounded-2xl text-lg shadow-lg hover:bg-primary-700 transition-all">
+            Start Your Pickup →
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// WHY SCRAPMITHRA
+// ─────────────────────────────────────────────
+const WhySection = () => {
+  const features = [
+    { icon:'bar_chart', color:'#16a34a', bg:'#dcfce7', title:'Transparent Pricing', desc:'Know the current indicative market rate for your scrap before the collector even arrives. No hidden deductions.' },
+    { icon:'shield', color:'#2563eb', bg:'#dbeafe', title:'Verified Collectors', desc:'All ScrapMithra collectors are verified and rated by customers. Only trusted partners get listed on our platform.' },
+    { icon:'home', color:'#7c3aed', bg:'#ede9fe', title:'Doorstep Pickup', desc:'No need to carry heavy scrap to a scrap yard. We come to you at your selected date and time slot.' },
+    { icon:'leaf', color:'#0d9488', bg:'#ccfbf1', title:'Sustainable Impact', desc:'Track how your recycling contributes to the environment. See your real CO₂ and waste impact with every pickup.' },
+  ];
+  return (
+    <section className="py-16 md:py-24 bg-primary-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <div className="section-divider mx-auto mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Why ScrapMithra?</h2>
+          <p className="text-gray-500">Built for trust, convenience, and a greener tomorrow.</p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((f, i) => (
+            <div key={i} className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 card-hover text-center group">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform" style={{background:f.bg}}>
+                <Icon name={f.icon} size={26} color={f.color} />
+              </div>
+              <h3 className="font-bold text-gray-800 mb-3">{f.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// IMPACT COUNTERS
+// ─────────────────────────────────────────────
+const ImpactCounters = ({ setPage }) => {
+  const stats = [
+    { icon:'♻️', value:128450, suffix:' kg', label:'Total Scrap Recycled', color:'#16a34a' },
+    { icon:'👥', value:8420, suffix:'', label:'Happy Customers', color:'#2563eb' },
+    { icon:'🚛', value:320, suffix:'+', label:'Verified Collectors', color:'#7c3aed' },
+    { icon:'🌿', value:141, suffix:' T', label:'CO₂ Avoided', color:'#0d9488' },
+  ];
+  return (
+    <section className="py-16 md:py-24 bg-primary-900 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-10">
+        <div className="rotating absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96">
+          <Icon name="recycle" size={384} color="white" />
+        </div>
+      </div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <div className="w-12 h-1 bg-green-400 mx-auto rounded mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">ScrapMithra's Growing Impact 🌱</h2>
+          <p className="text-green-300">Every kilogram recycled makes a difference. Here's what we've achieved together.</p>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((s, i) => (
+            <div key={i} className="text-center bg-white/5 backdrop-blur rounded-3xl p-6 border border-white/10 card-hover">
+              <div className="text-4xl mb-3">{s.icon}</div>
+              <div className="text-3xl font-bold text-white mb-1">
+                <AnimatedCounter target={s.value} suffix={s.suffix} />
+              </div>
+              <div className="text-sm text-green-300">{s.label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-10">
+          <button onClick={() => setPage('impact')} className="px-8 py-3 bg-white text-primary-700 font-semibold rounded-2xl hover:bg-primary-50 transition-all">
+            See Your Environmental Impact →
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// FIND COLLECTOR SECTION
+// ─────────────────────────────────────────────
+const FindCollectorSection = ({ setPage }) => (
+  <section className="py-16 md:py-24 bg-white">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center mb-12">
+        <div className="section-divider mx-auto mb-4"></div>
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Find a Scrap Collector Near You</h2>
+        <p className="text-gray-500">Browse verified collectors in your area and request a pickup.</p>
+      </div>
+      <div className="grid lg:grid-cols-2 gap-8 items-center">
+        {/* Mock map */}
+        <div className="bg-primary-50 rounded-3xl overflow-hidden border border-green-200 h-72 relative">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-5xl mb-3">🗺️</div>
+              <div className="text-gray-500 font-medium">Interactive map available</div>
+              <div className="text-sm text-gray-400">Collector locations near Thiruvananthapuram</div>
+            </div>
+          </div>
+          {/* Mock pins */}
+          {[
+            {top:'30%',left:'40%',label:'Arun',dist:'1.2km'},
+            {top:'55%',left:'60%',label:'GreenCycle',dist:'2.4km'},
+            {top:'45%',left:'25%',label:'EcoHaul',dist:'3.1km'},
+          ].map((pin,i) => (
+            <div key={i} className="absolute flex flex-col items-center" style={{top:pin.top, left:pin.left}}>
+              <div className="bg-primary-600 text-white text-xs px-2 py-1 rounded-lg mb-1 shadow font-medium">{pin.label} · {pin.dist}</div>
+              <div className="w-3 h-3 bg-primary-600 rounded-full border-2 border-white shadow"></div>
+            </div>
+          ))}
+          {/* You are here */}
+          <div className="absolute flex flex-col items-center" style={{top:'50%',left:'45%'}}>
+            <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded-lg mb-1 shadow font-medium">📍 You</div>
+            <div className="w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow animate-pulse"></div>
+          </div>
+        </div>
+
+        {/* Collector cards */}
+        <div className="space-y-4">
+          {MOCK_COLLECTORS.slice(0,3).map(col => (
+            <div key={col.id} className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm card-hover flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0" style={{background:col.color}}>
+                  {col.image}
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-800">{col.name}</div>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                    <span className="flex items-center gap-0.5"><Icon name="star" size={12} color="#f59e0b" /> {col.rating}</span>
+                    <span>·</span>
+                    <span className="flex items-center gap-0.5"><Icon name="map_pin" size={10} /> {col.distance}</span>
+                    <span>·</span>
+                    <span className={col.available ? 'text-green-600 font-medium' : 'text-gray-400'}>{col.available ? '✓ Available Today' : 'Unavailable'}</span>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-1">{col.materials.join(', ')}</div>
+                </div>
+              </div>
+              <button onClick={() => setPage('booking')} className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-xl transition-all ${col.available ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}>
+                {col.available ? 'Request' : 'Unavailable'}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// ─────────────────────────────────────────────
+// TESTIMONIALS
+// ─────────────────────────────────────────────
+const TestimonialsSection = () => (
+  <section className="py-16 md:py-24 bg-primary-50 pattern-bg">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center mb-12">
+        <div className="section-divider mx-auto mb-4"></div>
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">What Our Customers Say</h2>
+        <p className="text-gray-500">Real experiences from the ScrapMithra community.</p>
+        <p className="text-xs text-gray-400 mt-2">(Demo testimonials for prototype presentation)</p>
+      </div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {TESTIMONIALS.map((t, i) => (
+          <div key={i} className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 card-hover">
+            <div className="flex gap-0.5 mb-4">
+              {[...Array(t.rating)].map((_, j) => <Icon key={j} name="star" size={16} color="#f59e0b" />)}
+            </div>
+            <p className="text-sm text-gray-600 leading-relaxed mb-6 italic">"{t.text}"</p>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-bold">
+                {t.avatar}
+              </div>
+              <div>
+                <div className="font-semibold text-gray-800 text-sm">{t.name}</div>
+                <div className="text-xs text-gray-400">{t.role} · {t.location}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+// ─────────────────────────────────────────────
+// FAQ SECTION
+// ─────────────────────────────────────────────
+const FAQSection = () => {
+  const [openIdx, setOpenIdx] = useState(null);
+  return (
+    <section className="py-16 md:py-24 bg-white">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <div className="section-divider mx-auto mb-4"></div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+          <p className="text-gray-500">Everything you need to know about ScrapMithra.</p>
+        </div>
+        <div className="space-y-3">
+          {FAQS.map((faq, i) => (
+            <div key={i} className={`bg-white border rounded-2xl overflow-hidden transition-all ${openIdx === i ? 'border-primary-300 shadow-md' : 'border-gray-200'}`}>
+              <button onClick={() => setOpenIdx(openIdx === i ? null : i)}
+                className="w-full flex items-center justify-between px-6 py-4 text-left">
+                <span className="font-medium text-gray-800 pr-4 text-sm">{faq.q}</span>
+                <Icon name="chevron_down" size={18} color={openIdx === i ? '#16a34a' : '#9ca3af'}
+                  className={`flex-shrink-0 transition-transform duration-200 ${openIdx === i ? 'rotate-180' : ''}`} />
+              </button>
+              {openIdx === i && (
+                <div className="px-6 pb-5">
+                  <p className="text-sm text-gray-500 leading-relaxed">{faq.a}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ─────────────────────────────────────────────
+// FOOTER
+// ─────────────────────────────────────────────
+const Footer = ({ setPage }) => (
+  <footer className="bg-gray-900 text-gray-300">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        {/* Brand */}
+        <div className="lg:col-span-2">
+          <Logo size="md" white />
+          <p className="mt-4 text-sm text-gray-400 leading-relaxed max-w-xs">
+            Your Scrap. Our Responsibility. Building a cleaner circular economy, one pickup at a time.
+          </p>
+          <div className="flex gap-3 mt-6">
+            {['🐦','📘','📸','▶️'].map((s,i) => (
+              <div key={i} className="w-10 h-10 bg-gray-800 rounded-xl flex items-center justify-center cursor-pointer hover:bg-primary-700 transition-colors text-lg">
+                {s}
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 p-4 bg-gray-800 rounded-2xl">
+            <div className="text-xs text-gray-400 mb-1">📧 Contact Us</div>
+            <div className="text-sm font-medium text-white">support@scrapmithra.in</div>
+            <div className="text-sm text-gray-300 mt-1">📞 +91 98765 00000</div>
+          </div>
+        </div>
+
+        {/* Links */}
+        {[
+          { title:'Platform', links:[['Home','home'],['Scrap Rates','rates'],['Book Pickup','booking'],['How It Works','howitworks'],['Services','services']] },
+          { title:'Company', links:[['About','about'],['Impact','impact'],['Collector Program','about'],['Careers','about'],['Blog','about']] },
+          { title:'Legal & Support', links:[['Contact','about'],['FAQ','home'],['Privacy Policy','about'],['Terms & Conditions','about'],['Report an Issue','about']] },
+        ].map((col,i) => (
+          <div key={i}>
+            <h4 className="font-semibold text-white mb-4 text-sm">{col.title}</h4>
+            <ul className="space-y-2">
+              {col.links.map(([label,page]) => (
+                <li key={label}>
+                  <button onClick={() => setPage(page)} className="text-sm text-gray-400 hover:text-green-400 transition-colors">{label}</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <p className="text-sm text-gray-500">© 2026 ScrapMithra Technologies Pvt. Ltd. All rights reserved.</p>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span className="text-sm text-gray-500">All systems operational</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
+
+// ─────────────────────────────────────────────
+// HOME PAGE
+// ─────────────────────────────────────────────
+const HomePage = ({ setPage }) => (
+  <div className="fade-enter">
+    <RateTicker />
+    <HeroSection setPage={setPage} />
+    <RatePreviewSection setPage={setPage} />
+    <ScrapCalculator setPage={setPage} />
+    <HowItWorksSection setPage={setPage} />
+    <WhySection />
+    <ImpactCounters setPage={setPage} />
+    <FindCollectorSection setPage={setPage} />
+    <TestimonialsSection />
+    <FAQSection />
+  </div>
+);
+
+// ─────────────────────────────────────────────
+// RATES PAGE
+// ─────────────────────────────────────────────
+const RatesPage = ({ setPage }) => {
+  const [activeTab, setActiveTab] = useState('All');
+  const [location, setLocation] = useState('Kerala');
+  const [search, setSearch] = useState('');
+
+  const filtered = SCRAP_RATES.filter(r => {
+    const matchCat = activeTab === 'All' || r.category === activeTab;
+    const matchSearch = r.name.toLowerCase().includes(search.toLowerCase()) || r.category.toLowerCase().includes(search.toLowerCase());
+    return matchCat && matchSearch;
+  });
+
+  return (
+    <div className="fade-enter pt-16 min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <RateTicker />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Scrap Market Rates</h1>
+              <p className="text-gray-500 mt-1">Live indicative rates for all scrap categories.</p>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span className="text-sm text-gray-500">Last Updated: Today, 10:30 AM</span>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl bg-white">
+                <Icon name="map_pin" size={16} color="#16a34a" />
+                <select value={location} onChange={e => setLocation(e.target.value)} className="text-sm text-gray-700 bg-transparent border-none outline-none">
+                  {LOCATIONS.map(l => <option key={l}>{l}</option>)}
+                </select>
+              </div>
+              <button onClick={() => setPage('booking')} className="btn-primary px-6 py-2 bg-primary-600 text-white font-medium rounded-xl text-sm hover:bg-primary-700 transition-all">
+                Book Pickup
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Search + Tabs */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Icon name="search" size={18} color="#9ca3af" className="absolute left-3 top-1/2 -translate-y-1/2" />
+            <input value={search} onChange={e => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white text-sm focus:border-primary-500"
+              placeholder="Search copper, newspaper, laptop..." />
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map(cat => (
+              <button key={cat} onClick={() => setActiveTab(cat)}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeTab === cat ? 'bg-primary-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300'}`}>
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Rate cards grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+          {filtered.map(rate => (
+            <div key={rate.id} className={`bg-white rounded-2xl p-5 border border-gray-100 shadow-sm card-hover ${rate.changeDir === 'up' ? 'rate-card-up' : rate.changeDir === 'down' ? 'rate-card-down' : 'rate-card-stable'}`}>
+              <div className="flex items-start justify-between mb-3">
+                <span className="text-3xl">{rate.icon}</span>
+                <span className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${rate.changeDir === 'up' ? 'bg-green-100 text-green-700' : rate.changeDir === 'down' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'}`}>
+                  {rate.changeDir === 'up' ? '↑' : rate.changeDir === 'down' ? '↓' : '→'} {rate.changePercentage}%
+                </span>
+              </div>
+              <div className="text-sm text-gray-500 mb-1">{rate.category}</div>
+              <div className="font-bold text-gray-800 mb-1">{rate.name}</div>
+              <div className="text-2xl font-bold text-primary-700">₹{rate.price.toLocaleString('en-IN')}<span className="text-sm font-normal text-gray-400">/{rate.unit}</span></div>
+              <div className="text-xs text-gray-400 mt-1 mb-4">{rate.description}</div>
+              <button onClick={() => setPage('booking')} className="w-full py-2 text-sm font-medium text-primary-600 bg-primary-50 rounded-xl hover:bg-primary-100 transition-colors">
+                Book Pickup →
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* Disclaimer */}
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 flex gap-3">
+          <Icon name="info" size={20} color="#d97706" className="flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm text-amber-800 font-semibold mb-1">Rate Disclaimer</p>
+            <p className="text-sm text-amber-700">
+              These are indicative market rates updated regularly. Final value may vary depending on material quality, condition, quantity and current market conditions. Rates shown are for {location} region.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// BOOKING FLOW (Multi-step)
+// ─────────────────────────────────────────────
+const BookingPage = ({ setPage }) => {
+  const [step, setStep] = useState(1);
+  const [selectedScrap, setSelectedScrap] = useState({});
+  const [quantities, setQuantities] = useState({});
+  const [formData, setFormData] = useState({ name:'Priya Krishnan', phone:'9876543210', house:'12, Green Park Colony', street:'Near Civil Station', city:'Thiruvananthapuram', state:'Kerala', pincode:'695001' });
+  const [selectedDate, setSelectedDate] = useState('2026-09-12');
+  const [selectedSlot, setSelectedSlot] = useState('9 AM – 11 AM');
+  const [bookingId, setBookingId] = useState('');
+
+  const scrapOptions = [
+    { id:'paper', label:'Paper', icon:'📰', unit:'kg' },
+    { id:'cardboard', label:'Cardboard', icon:'📦', unit:'kg' },
+    { id:'plastic', label:'Plastic', icon:'🍶', unit:'kg' },
+    { id:'iron', label:'Iron', icon:'⚙️', unit:'kg' },
+    { id:'steel', label:'Steel', icon:'🔩', unit:'kg' },
+    { id:'aluminium', label:'Aluminium', icon:'🥤', unit:'kg' },
+    { id:'copper', label:'Copper', icon:'🔌', unit:'kg' },
+    { id:'ewaste', label:'E-Waste', icon:'💻', unit:'pieces' },
+    { id:'appliances', label:'Appliances', icon:'🧊', unit:'pieces' },
+    { id:'other', label:'Other', icon:'♻️', unit:'kg' },
+  ];
+
+  const timeSlots = ['9 AM – 11 AM','11 AM – 1 PM','2 PM – 4 PM','4 PM – 6 PM'];
+
+  const toggleScrap = (id) => {
+    setSelectedScrap(prev => { const n = {...prev}; if(n[id]) delete n[id]; else n[id] = true; return n; });
+  };
+
+  const getEstimate = () => {
+    return Object.keys(selectedScrap).reduce((sum, id) => {
+      const item = scrapOptions.find(s => s.id === id);
+      const qty = quantities[id] || 5;
+      const rate = SCRAP_RATES.find(r => r.name.toLowerCase().startsWith(item?.label.toLowerCase().slice(0,4)));
+      return sum + (rate ? rate.price * qty : 0);
+    }, 0);
+  };
+
+  const handleConfirm = () => {
+    const id = 'SM-2026-' + (Math.floor(Math.random() * 9000) + 1000);
+    setBookingId(id);
+    setStep(5);
+  };
+
+  const steps = ['Select Scrap','Pickup Location','Schedule','Confirm'];
+
+  if (step === 5) {
+    return (
+      <div className="pt-16 min-h-screen bg-primary-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-white rounded-3xl shadow-xl p-8 border border-green-100">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Icon name="check_circle" size={48} color="#16a34a" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Pickup Booked! 🎉</h2>
+            <p className="text-gray-500 mb-6">Your scrap pickup has been confirmed. A verified collector will arrive at your selected slot.</p>
+            <div className="bg-primary-50 rounded-2xl p-5 text-left space-y-3 mb-6">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Booking ID</span>
+                <span className="font-bold text-primary-700">{bookingId}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Status</span>
+                <span className="text-sm font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full">Pickup Scheduled</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Date & Time</span>
+                <span className="text-sm font-medium text-gray-700">{selectedDate} · {selectedSlot}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Est. Value</span>
+                <span className="font-bold text-primary-700">₹{getEstimate().toLocaleString('en-IN')}</span>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <button onClick={() => setPage('tracking')} className="w-full py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all">
+                Track My Pickup
+              </button>
+              <button onClick={() => setPage('dashboard')} className="w-full py-3 bg-gray-100 text-gray-700 font-medium rounded-2xl hover:bg-gray-200 transition-all">
+                Go to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-16 min-h-screen bg-gray-50">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        {/* Progress */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2">
+            {steps.map((s, i) => (
+              <div key={i} className="flex items-center gap-2 flex-1">
+                <div className="flex flex-col items-center">
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${i + 1 < step ? 'bg-primary-600 text-white' : i + 1 === step ? 'step-active text-white shadow-lg' : 'bg-gray-200 text-gray-500'}`}>
+                    {i + 1 < step ? <Icon name="check" size={16} /> : i + 1}
+                  </div>
+                  <span className={`text-xs mt-1 font-medium hidden sm:block ${i + 1 === step ? 'text-primary-600' : 'text-gray-400'}`}>{s}</span>
+                </div>
+                {i < steps.length - 1 && (
+                  <div className={`flex-1 h-0.5 mx-2 mb-4 transition-all ${i + 1 < step ? 'bg-primary-600' : 'bg-gray-200'}`}></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+          {/* Step 1 */}
+          {step === 1 && (
+            <div className="p-6 sm:p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Select Your Scrap</h2>
+              <p className="text-gray-500 text-sm mb-6">Choose all categories that apply.</p>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {scrapOptions.map(item => (
+                  <div key={item.id}>
+                    <button onClick={() => toggleScrap(item.id)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all text-left ${selectedScrap[item.id] ? 'border-primary-500 bg-primary-50' : 'border-gray-200 bg-white hover:border-primary-200'}`}>
+                      <span className="text-2xl">{item.icon}</span>
+                      <div>
+                        <div className={`text-sm font-semibold ${selectedScrap[item.id] ? 'text-primary-700' : 'text-gray-700'}`}>{item.label}</div>
+                        {selectedScrap[item.id] && <div className="text-xs text-primary-500">Selected ✓</div>}
+                      </div>
+                    </button>
+                    {selectedScrap[item.id] && (
+                      <div className="mt-2 flex items-center gap-2 px-3">
+                        <label className="text-xs text-gray-500 whitespace-nowrap">Qty ({item.unit}):</label>
+                        <input type="number" min="1" value={quantities[item.id] || 5} onChange={e => setQuantities(prev => ({...prev, [item.id]: parseInt(e.target.value) || 1}))}
+                          className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {Object.keys(selectedScrap).length > 0 && (
+                <div className="bg-primary-50 rounded-2xl p-4 mb-4">
+                  <div className="text-sm text-gray-600">Estimated Value: <span className="font-bold text-primary-700 text-lg">₹{getEstimate().toLocaleString('en-IN')}</span></div>
+                </div>
+              )}
+              <button onClick={() => setStep(2)} disabled={Object.keys(selectedScrap).length === 0}
+                className="w-full py-3 bg-primary-600 text-white font-semibold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition-all">
+                Continue →
+              </button>
+            </div>
+          )}
+
+          {/* Step 2 */}
+          {step === 2 && (
+            <div className="p-6 sm:p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Pickup Location</h2>
+              <p className="text-gray-500 text-sm mb-6">Enter the address where we should collect your scrap.</p>
+              <button className="w-full mb-5 flex items-center justify-center gap-2 py-3 border-2 border-dashed border-primary-300 rounded-2xl text-primary-600 font-medium text-sm hover:bg-primary-50 transition-all">
+                <Icon name="navigation" size={18} /> Use My Current Location
+              </button>
+              <div className="grid gap-4">
+                {[
+                  { label:'Full Name', key:'name', type:'text', placeholder:'Your full name' },
+                  { label:'Mobile Number', key:'phone', type:'tel', placeholder:'10-digit mobile number' },
+                  { label:'House / Building', key:'house', type:'text', placeholder:'House no., apartment, building name' },
+                  { label:'Street / Area', key:'street', type:'text', placeholder:'Street, area, landmark' },
+                  { label:'City', key:'city', type:'text', placeholder:'City' },
+                  { label:'State', key:'state', type:'text', placeholder:'State' },
+                  { label:'Pincode', key:'pincode', type:'text', placeholder:'6-digit pincode' },
+                ].map(field => (
+                  <div key={field.key}>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">{field.label}</label>
+                    <input type={field.type} value={formData[field.key]} onChange={e => setFormData(prev => ({...prev, [field.key]: e.target.value}))}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm" placeholder={field.placeholder} />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button onClick={() => setStep(1)} className="px-6 py-3 border border-gray-200 text-gray-600 font-medium rounded-2xl hover:bg-gray-50 transition-all">← Back</button>
+                <button onClick={() => setStep(3)} className="flex-1 py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all">Continue →</button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3 */}
+          {step === 3 && (
+            <div className="p-6 sm:p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Schedule Pickup</h2>
+              <p className="text-gray-500 text-sm mb-6">Choose your preferred date and time.</p>
+              <div className="mb-5">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Select Date</label>
+                <input type="date" value={selectedDate} min="2026-09-11" onChange={e => setSelectedDate(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-3">Select Time Slot</label>
+                <div className="grid grid-cols-2 gap-3">
+                  {timeSlots.map(slot => (
+                    <button key={slot} onClick={() => setSelectedSlot(slot)}
+                      className={`py-4 px-4 rounded-2xl border-2 text-sm font-medium transition-all flex items-center gap-2 justify-center ${selectedSlot === slot ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-200 text-gray-600 hover:border-primary-200'}`}>
+                      <Icon name="clock" size={16} color={selectedSlot === slot ? '#16a34a' : '#9ca3af'} />
+                      {slot}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button onClick={() => setStep(2)} className="px-6 py-3 border border-gray-200 text-gray-600 font-medium rounded-2xl hover:bg-gray-50 transition-all">← Back</button>
+                <button onClick={() => setStep(4)} className="flex-1 py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all">Review Booking →</button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 4 */}
+          {step === 4 && (
+            <div className="p-6 sm:p-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Confirm Your Pickup</h2>
+              <p className="text-gray-500 text-sm mb-6">Review your booking details before confirming.</p>
+              <div className="space-y-4 mb-6">
+                <div className="bg-gray-50 rounded-2xl p-4">
+                  <div className="text-xs text-gray-500 font-medium mb-3 uppercase tracking-wide">Selected Scrap</div>
+                  <div className="space-y-2">
+                    {Object.keys(selectedScrap).map(id => {
+                      const item = scrapOptions.find(s => s.id === id);
+                      const qty = quantities[id] || 5;
+                      const rate = SCRAP_RATES.find(r => r.name.toLowerCase().startsWith(item?.label.toLowerCase().slice(0,4)));
+                      const val = rate ? rate.price * qty : 0;
+                      return (
+                        <div key={id} className="flex justify-between text-sm">
+                          <span className="text-gray-700">{item?.icon} {item?.label} — {qty} {item?.unit}</span>
+                          <span className="font-semibold text-primary-700">₹{val.toLocaleString('en-IN')}</span>
+                        </div>
+                      );
+                    })}
+                    <div className="border-t border-gray-200 pt-2 flex justify-between font-bold">
+                      <span>Estimated Total</span>
+                      <span className="text-primary-700">₹{getEstimate().toLocaleString('en-IN')}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 rounded-2xl p-4">
+                  <div className="text-xs text-gray-500 font-medium mb-2 uppercase tracking-wide">Pickup Address</div>
+                  <p className="text-sm text-gray-700">{formData.house}, {formData.street}, {formData.city}, {formData.state} – {formData.pincode}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gray-50 rounded-2xl p-4">
+                    <div className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wide">Date</div>
+                    <p className="text-sm font-medium text-gray-700">{selectedDate}</p>
+                  </div>
+                  <div className="bg-gray-50 rounded-2xl p-4">
+                    <div className="text-xs text-gray-500 font-medium mb-1 uppercase tracking-wide">Time Slot</div>
+                    <p className="text-sm font-medium text-gray-700">{selectedSlot}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-primary-50 border border-primary-200 rounded-2xl p-4 mb-5">
+                <p className="text-xs text-primary-700">
+                  <Icon name="info" size={12} className="inline mr-1" />
+                  Pickup is free. Final amount is determined after physical weighing by the collector.
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <button onClick={() => setStep(3)} className="px-6 py-3 border border-gray-200 text-gray-600 font-medium rounded-2xl hover:bg-gray-50 transition-all">← Back</button>
+                <button onClick={handleConfirm} className="flex-1 py-3 bg-primary-600 text-white font-bold rounded-2xl hover:bg-primary-700 transition-all shadow-lg">
+                  ✅ Confirm Pickup
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// TRACKING PAGE
+// ─────────────────────────────────────────────
+const TrackingPage = ({ setPage }) => {
+  const [trackingStep, setTrackingStep] = useState(3);
+  const [showWeighing, setShowWeighing] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('UPI');
+  const [paid, setPaid] = useState(false);
+
+  const statuses = [
+    { label:'Pickup Requested', desc:'Your request was received', time:'09:15 AM' },
+    { label:'Collector Assigned', desc:'Arun Kumar has been assigned', time:'09:25 AM' },
+    { label:'Collector On The Way', desc:'En route to your location', time:'09:40 AM' },
+    { label:'Collector Arrived', desc:'Collector is at your doorstep', time:'10:05 AM' },
+    { label:'Scrap Weighed', desc:'Digital weighing complete', time:'10:20 AM' },
+    { label:'Payment Completed', desc:'₹682 paid via UPI', time:'10:25 AM' },
+  ];
+
+  const weighingData = [
+    { material:'Paper', weight:12, rate:14, amount:168 },
+    { material:'Cardboard', weight:8, rate:8, amount:64 },
+    { material:'Iron', weight:15, rate:30, amount:450 },
+  ];
+  const total = weighingData.reduce((s, r) => s + r.amount, 0);
+
+  return (
+    <div className="pt-16 min-h-screen bg-gray-50">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Track Pickup</h1>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-sm text-gray-500">Booking ID:</span>
+            <span className="font-bold text-primary-600">SM-2026-001245</span>
+          </div>
+        </div>
+
+        {/* Collector card */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mb-6">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-primary-600 flex items-center justify-center text-white font-bold text-lg">AK</div>
+              <div>
+                <div className="font-bold text-gray-900">Arun Kumar</div>
+                <div className="flex items-center gap-1 text-sm mt-0.5">
+                  {[...Array(5)].map((_, i) => <Icon key={i} name="star" size={14} color={i < 4 ? '#f59e0b' : '#d1d5db'} />)}
+                  <span className="text-gray-500 ml-1">4.8 (312 reviews)</span>
+                </div>
+                <div className="text-xs text-gray-400 mt-1">🚛 ScrapMithra Collection Van · KL-01-AB-1234</div>
+              </div>
+            </div>
+            <div className="text-right flex-shrink-0">
+              <div className="text-xs text-gray-400">ETA</div>
+              <div className="font-bold text-primary-600 text-lg">15 min</div>
+            </div>
+          </div>
+          <div className="flex gap-3 mt-4">
+            <button className="flex-1 flex items-center justify-center gap-2 py-3 border border-green-300 text-primary-700 rounded-2xl text-sm font-medium hover:bg-primary-50 transition-all">
+              <Icon name="phone" size={16} /> Call Collector
+            </button>
+            <button className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-200 text-gray-600 rounded-2xl text-sm font-medium hover:bg-gray-50 transition-all">
+              <Icon name="message" size={16} /> Message
+            </button>
+          </div>
+        </div>
+
+        {/* Status timeline */}
+        {!showWeighing && (
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-6">
+            <h2 className="font-bold text-gray-800 mb-6">Pickup Status</h2>
+            <div className="relative pl-10">
+              <div className="timeline-line"></div>
+              {statuses.map((s, i) => (
+                <div key={i} className={`relative mb-6 last:mb-0 transition-all ${i <= trackingStep - 1 ? 'opacity-100' : 'opacity-40'}`}>
+                  <div className={`absolute -left-10 w-10 h-10 rounded-full flex items-center justify-center border-2 z-10 ${i < trackingStep - 1 ? 'bg-primary-600 border-primary-600' : i === trackingStep - 1 ? 'bg-white border-primary-600 animate-pulse' : 'bg-white border-gray-300'}`}>
+                    {i < trackingStep - 1 ? <Icon name="check" size={16} color="white" /> : <span className={`w-3 h-3 rounded-full ${i === trackingStep - 1 ? 'bg-primary-600' : 'bg-gray-300'}`}></span>}
+                  </div>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className={`font-semibold text-sm ${i <= trackingStep - 1 ? 'text-gray-900' : 'text-gray-400'}`}>{s.label}</div>
+                      <div className="text-xs text-gray-400 mt-0.5">{s.desc}</div>
+                    </div>
+                    {i < trackingStep && <div className="text-xs text-gray-400 flex-shrink-0 ml-4">{s.time}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {trackingStep < 6 && (
+              <div className="mt-6 pt-4 border-t border-gray-100">
+                <button onClick={() => { setTrackingStep(prev => Math.min(prev + 1, 6)); if(trackingStep === 4) setShowWeighing(true); }}
+                  className="w-full py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all text-sm">
+                  Simulate: {statuses[trackingStep]?.label} →
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Weighing screen */}
+        {showWeighing && !paid && (
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center">
+                <Icon name="weight" size={20} color="#16a34a" />
+              </div>
+              <div>
+                <h2 className="font-bold text-gray-900">Scrap Weighing</h2>
+                <div className="flex items-center gap-1 text-xs text-green-600 font-medium">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  Weight verified digitally
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto mb-4">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100">
+                    <th className="text-left py-2 text-gray-500 font-medium">Material</th>
+                    <th className="text-right py-2 text-gray-500 font-medium">Weight</th>
+                    <th className="text-right py-2 text-gray-500 font-medium">Rate</th>
+                    <th className="text-right py-2 text-gray-500 font-medium">Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {weighingData.map((row, i) => (
+                    <tr key={i}>
+                      <td className="py-3 font-medium text-gray-800">{row.material}</td>
+                      <td className="py-3 text-right text-gray-600">{row.weight} kg</td>
+                      <td className="py-3 text-right text-gray-600">₹{row.rate}/kg</td>
+                      <td className="py-3 text-right font-bold text-primary-700">₹{row.amount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t-2 border-gray-200">
+                    <td colSpan="3" className="py-3 font-bold text-gray-900">Total</td>
+                    <td className="py-3 text-right font-bold text-2xl text-primary-700">₹{total}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <div className="mb-5">
+              <label className="block text-sm font-medium text-gray-700 mb-3">Payment Method</label>
+              <div className="grid grid-cols-3 gap-2">
+                {['UPI','Cash','Bank Transfer'].map(m => (
+                  <button key={m} onClick={() => setPaymentMethod(m)}
+                    className={`py-3 text-sm font-medium rounded-2xl border-2 transition-all ${paymentMethod === m ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-200 text-gray-600'}`}>
+                    {m === 'UPI' ? '📱' : m === 'Cash' ? '💵' : '🏦'} {m}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-primary-600 rounded-2xl p-4 flex items-center justify-between mb-5">
+              <span className="text-white font-medium">Amount Payable</span>
+              <span className="text-white font-bold text-2xl">₹{total}</span>
+            </div>
+
+            <button onClick={() => { setPaid(true); setTrackingStep(6); }}
+              className="w-full py-4 bg-primary-600 text-white font-bold rounded-2xl hover:bg-primary-700 transition-all text-base shadow-lg">
+              ✅ Confirm & Get Paid
+            </button>
+          </div>
+        )}
+
+        {paid && (
+          <div className="bg-white rounded-3xl shadow-sm border border-green-200 p-8 text-center">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Icon name="check_circle" size={40} color="#16a34a" />
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Payment Successful! 🎉</h2>
+            <p className="text-gray-500 mb-4">₹{total} has been sent via {paymentMethod}. Thank you for recycling!</p>
+            <div className="bg-primary-50 rounded-2xl p-4 mb-6 text-left">
+              <div className="text-sm text-gray-600 space-y-2">
+                <div className="flex justify-between"><span>Amount Paid</span><span className="font-bold text-primary-700">₹{total}</span></div>
+                <div className="flex justify-between"><span>Method</span><span className="font-medium">{paymentMethod}</span></div>
+                <div className="flex justify-between"><span>Transaction ID</span><span className="font-mono text-xs text-gray-500">TXN{Date.now()}</span></div>
+              </div>
+            </div>
+            <div className="bg-green-50 rounded-2xl p-4 mb-6">
+              <div className="text-sm text-green-700 font-medium mb-2">🌱 Your Environmental Impact</div>
+              <div className="grid grid-cols-2 gap-2 text-center">
+                <div><div className="text-lg font-bold text-green-700">35 kg</div><div className="text-xs text-green-600">Waste Diverted</div></div>
+                <div><div className="text-lg font-bold text-green-700">38 L</div><div className="text-xs text-green-600">Water Saved</div></div>
+              </div>
+            </div>
+            <button onClick={() => setPage('dashboard')} className="w-full py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all">
+              Go to Dashboard
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// LOGIN PAGE
+// ─────────────────────────────────────────────
+const LoginPage = ({ setPage, setIsLoggedIn, setUserRole }) => {
+  const [role, setRole] = useState('customer');
+  const [phone, setPhone] = useState('9876543210');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    setUserRole(role);
+    setPage(role === 'admin' ? 'admin' : role === 'collector' ? 'collector' : 'dashboard');
+  };
+
+  return (
+    <div className="pt-16 min-h-screen bg-primary-50 flex items-center justify-center px-4 py-12">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-8">
+          <Logo size="lg" />
+          <h1 className="text-2xl font-bold text-gray-900 mt-4">Welcome to ScrapMithra</h1>
+          <p className="text-gray-500 mt-1">Sign in to manage your pickups</p>
+        </div>
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+          {/* Role selector */}
+          <div className="grid grid-cols-3 gap-2 mb-6 bg-gray-100 rounded-2xl p-1">
+            {[{v:'customer',label:'Customer'},{v:'collector',label:'Collector'},{v:'admin',label:'Admin'}].map(r => (
+              <button key={r.v} onClick={() => setRole(r.v)}
+                className={`py-2.5 rounded-xl text-sm font-medium transition-all ${role === r.v ? 'bg-white shadow text-primary-700' : 'text-gray-500'}`}>
+                {r.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Mobile Number</label>
+            <div className="flex gap-2">
+              <div className="flex items-center px-3 border border-gray-200 rounded-xl text-sm text-gray-600 bg-gray-50">+91</div>
+              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} maxLength={10}
+                className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm" placeholder="Enter mobile number" />
+            </div>
+          </div>
+
+          {!otpSent ? (
+            <button onClick={() => setOtpSent(true)} className="w-full py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all mb-4">
+              Send OTP
+            </button>
+          ) : (
+            <>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
+                <input type="text" value={otp} onChange={e => setOtp(e.target.value)} maxLength={6}
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-center text-xl font-bold tracking-widest" placeholder="● ● ● ● ● ●" />
+                <div className="text-xs text-gray-400 mt-2 text-center">Demo OTP: <strong>123456</strong> (any code works in demo mode)</div>
+              </div>
+              <button onClick={handleLogin} className="w-full py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all mb-4">
+                Login as {role === 'customer' ? 'Customer' : role === 'collector' ? 'Collector' : 'Admin'}
+              </button>
+            </>
+          )}
+
+          <div className="text-center">
+            <p className="text-xs text-gray-400">Demo mode — any mobile number & OTP works</p>
+          </div>
+        </div>
+        <div className="text-center mt-6">
+          <button onClick={() => setPage('home')} className="text-sm text-gray-400 hover:text-gray-600">← Back to Home</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// CUSTOMER DASHBOARD
+// ─────────────────────────────────────────────
+const CustomerDashboard = ({ setPage }) => {
+  const upcoming = MOCK_PICKUPS[0];
+  const stats = [
+    { icon:'📅', label:'Upcoming Pickups', value:'1', color:'#dbeafe', textColor:'#2563eb' },
+    { icon:'♻️', label:'Total Scrap Sold', value:'68 kg', color:'#dcfce7', textColor:'#16a34a' },
+    { icon:'💰', label:'Total Earnings', value:'₹4,114', color:'#ede9fe', textColor:'#7c3aed' },
+    { icon:'🌿', label:'CO₂ Avoided', value:'74 kg', color:'#ccfbf1', textColor:'#0d9488' },
+  ];
+  return (
+    <div className="pt-16 min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Welcome back, Priya 👋</h1>
+            <p className="text-gray-500 mt-1">Here's your scrap recycling overview.</p>
+          </div>
+          <button onClick={() => setPage('booking')} className="btn-primary px-6 py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700 transition-all text-sm flex items-center gap-2">
+            <Icon name="plus" size={18} /> New Pickup
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {stats.map((s, i) => (
+            <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 card-hover">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3" style={{background:s.color}}>{s.icon}</div>
+              <div className="text-2xl font-bold" style={{color:s.textColor}}>{s.value}</div>
+              <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Upcoming Pickup */}
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+            <h2 className="font-bold text-gray-800 mb-5 flex items-center gap-2">
+              <Icon name="calendar" size={18} color="#16a34a" /> Upcoming Pickup
+            </h2>
+            <div className="bg-primary-50 rounded-2xl p-4 mb-4">
+              <div className="flex items-center justify-between mb-3">
+                <span className="font-bold text-primary-700">{upcoming.id}</span>
+                <span className="text-xs font-semibold bg-green-100 text-green-700 px-3 py-1 rounded-full">{upcoming.status}</span>
+              </div>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div className="flex gap-2"><Icon name="user" size={14} color="#6b7280" /><span>{upcoming.collector}</span></div>
+                <div className="flex gap-2"><Icon name="calendar" size={14} color="#6b7280" /><span>{upcoming.date} · {upcoming.time}</span></div>
+                <div className="flex gap-2"><Icon name="map_pin" size={14} color="#6b7280" /><span className="truncate">{upcoming.address}</span></div>
+                <div className="flex gap-2"><Icon name="dollar" size={14} color="#6b7280" /><span>Est. ₹{upcoming.estValue.toLocaleString('en-IN')}</span></div>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <button onClick={() => setPage('tracking')} className="py-2.5 text-xs font-medium bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-all">Track</button>
+              <button className="py-2.5 text-xs font-medium border border-gray-200 text-gray-600 rounded-xl hover:bg-gray-50 transition-all">Reschedule</button>
+              <button className="py-2.5 text-xs font-medium border border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-all">Cancel</button>
+            </div>
+          </div>
+
+          {/* Eco Impact */}
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+            <h2 className="font-bold text-gray-800 mb-5 flex items-center gap-2">
+              <Icon name="leaf" size={18} color="#16a34a" /> Your Eco Impact 🌱
+            </h2>
+            <p className="text-sm text-gray-500 mb-5">You recycled <strong className="text-primary-700">68 kg</strong> of scrap. Here's what that means:</p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { emoji:'🌳', val:'4.1', unit:'Trees Saved', color:'#dcfce7' },
+                { emoji:'💧', val:'1,820 L', unit:'Water Saved', color:'#dbeafe' },
+                { emoji:'⚡', val:'115 kWh', unit:'Energy Saved', color:'#fef9c3' },
+                { emoji:'♻️', val:'68 kg', unit:'Waste Diverted', color:'#ede9fe' },
+              ].map((item, i) => (
+                <div key={i} className="rounded-2xl p-4 text-center" style={{background:item.color}}>
+                  <div className="text-2xl mb-1">{item.emoji}</div>
+                  <div className="text-lg font-bold text-gray-800">{item.val}</div>
+                  <div className="text-xs text-gray-500">{item.unit}</div>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-3 text-center">Estimated values based on recycled materials</p>
+          </div>
+        </div>
+
+        {/* Pickup History */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mt-6">
+          <h2 className="font-bold text-gray-800 mb-5 flex items-center gap-2">
+            <Icon name="activity" size={18} color="#16a34a" /> Pickup History
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100">
+                  <th className="text-left py-3 text-gray-500 font-medium">Date</th>
+                  <th className="text-left py-3 text-gray-500 font-medium">Booking ID</th>
+                  <th className="text-left py-3 text-gray-500 font-medium hidden sm:table-cell">Scrap</th>
+                  <th className="text-left py-3 text-gray-500 font-medium hidden md:table-cell">Weight</th>
+                  <th className="text-right py-3 text-gray-500 font-medium">Amount</th>
+                  <th className="text-right py-3 text-gray-500 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {MOCK_HISTORY.map((row, i) => (
+                  <tr key={i} className="hover:bg-gray-50 transition-colors">
+                    <td className="py-3 text-gray-600">{row.date}</td>
+                    <td className="py-3 text-primary-600 font-medium">{row.id}</td>
+                    <td className="py-3 text-gray-600 hidden sm:table-cell">{row.scrap}</td>
+                    <td className="py-3 text-gray-600 hidden md:table-cell">{row.weight}</td>
+                    <td className="py-3 text-right font-bold text-gray-800">{row.amount}</td>
+                    <td className="py-3 text-right"><span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-1 rounded-full">{row.status}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// COLLECTOR DASHBOARD
+// ─────────────────────────────────────────────
+const CollectorDashboard = ({ setPage }) => {
+  const [requests, setRequests] = useState(MOCK_REQUESTS.map(r => ({...r, status:'pending'})));
+  const [activePickup, setActivePickup] = useState(null);
+  const [workflowStep, setWorkflowStep] = useState(0);
+
+  const overviewStats = [
+    { icon:'📬', label:'New Requests', value:'3', color:'#fce7f3', textColor:'#be185d' },
+    { icon:'🚛', label:"Today's Pickups", value:'5', color:'#dcfce7', textColor:'#16a34a' },
+    { icon:'✅', label:'Completed', value:'12', color:'#dbeafe', textColor:'#2563eb' },
+    { icon:'💰', label:"Today's Earnings", value:'₹4,250', color:'#ede9fe', textColor:'#7c3aed' },
+  ];
+
+  const handleAccept = (idx) => {
+    setRequests(prev => prev.map((r, i) => i === idx ? {...r, status:'accepted'} : r));
+    setActivePickup(requests[idx]);
+  };
+
+  const handleReject = (idx) => {
+    setRequests(prev => prev.map((r, i) => i === idx ? {...r, status:'rejected'} : r));
+  };
+
+  const workflowSteps = ['View Details','Navigate','Mark Arrived','Enter Weights','Confirm Payment','Complete'];
+
+  return (
+    <div className="pt-16 min-h-screen bg-gray-50">
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Collector Dashboard 👋</h1>
+            <p className="text-gray-500 mt-1">Welcome back, Arun Kumar · Today: {new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short'})}</p>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {overviewStats.map((s, i) => (
+            <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 card-hover">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3" style={{background:s.color}}>{s.icon}</div>
+              <div className="text-2xl font-bold" style={{color:s.textColor}}>{s.value}</div>
+              <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Active pickup workflow */}
+        {activePickup && (
+          <div className="bg-primary-600 rounded-3xl p-6 mb-6 text-white">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold text-lg">Active Pickup: {activePickup.id}</h2>
+              <span className="text-xs bg-white/20 px-3 py-1 rounded-full">In Progress</span>
+            </div>
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+              {workflowSteps.map((s, i) => (
+                <div key={i} className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium ${i <= workflowStep ? 'bg-white text-primary-700' : 'bg-white/20 text-white/70'}`}>{i < workflowStep ? '✓ ' : ''}{s}</div>
+              ))}
+            </div>
+            <div className="text-sm text-green-200 mb-4">{activePickup.customer} · {activePickup.location}</div>
+            {workflowStep < 5 && (
+              <button onClick={() => setWorkflowStep(prev => Math.min(prev + 1, 5))} className="px-6 py-3 bg-white text-primary-700 font-semibold rounded-2xl hover:bg-primary-50 transition-all text-sm">
+                {workflowStep === 4 ? '✅ Complete Pickup' : `→ ${workflowSteps[workflowStep + 1]}`}
+              </button>
+            )}
+            {workflowStep === 5 && <div className="text-white font-bold text-lg">✅ Pickup Completed!</div>}
+          </div>
+        )}
+
+        {/* Pickup Requests */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+          <h2 className="font-bold text-gray-800 mb-5 flex items-center gap-2">
+            <Icon name="bell" size={18} color="#16a34a" /> Pickup Requests
+          </h2>
+          <div className="space-y-4">
+            {requests.map((req, i) => (
+              <div key={i} className={`border-2 rounded-2xl p-4 transition-all ${req.status === 'accepted' ? 'border-green-300 bg-green-50' : req.status === 'rejected' ? 'border-gray-200 bg-gray-50 opacity-60' : 'border-gray-200'}`}>
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-primary-600">{req.id}</span>
+                      {req.status === 'accepted' && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">Accepted</span>}
+                      {req.status === 'rejected' && <span className="text-xs bg-gray-200 text-gray-500 px-2 py-0.5 rounded-full font-medium">Rejected</span>}
+                    </div>
+                    <div className="text-sm font-semibold text-gray-800 mt-1">{req.customer}</div>
+                    <div className="text-sm text-gray-500 flex items-center gap-1 mt-0.5"><Icon name="map_pin" size={12} /> {req.location}</div>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <div className="font-bold text-primary-700">{req.estValue}</div>
+                    <div className="text-xs text-gray-400">{req.date} · {req.time}</div>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500 mb-3">📦 {req.scrap} · {req.qty}</div>
+                {req.status === 'pending' && (
+                  <div className="flex gap-2">
+                    <button onClick={() => handleAccept(i)} className="flex-1 py-2.5 bg-primary-600 text-white font-semibold rounded-xl text-sm hover:bg-primary-700 transition-all">✅ Accept</button>
+                    <button onClick={() => handleReject(i)} className="flex-1 py-2.5 border border-red-300 text-red-600 font-medium rounded-xl text-sm hover:bg-red-50 transition-all">✕ Reject</button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// ADMIN DASHBOARD
+// ─────────────────────────────────────────────
+const AdminDashboard = ({ setPage }) => {
+  const [activeTab, setActiveTab] = useState('rates');
+  const [rates, setRates] = useState(SCRAP_RATES.map(r => ({...r, active:true})));
+  const [editingRate, setEditingRate] = useState(null);
+  const [newPrice, setNewPrice] = useState('');
+
+  const adminStats = [
+    { icon:'👥', label:'Total Customers', value:'8,420', change:'+12%', color:'#dbeafe', textColor:'#2563eb' },
+    { icon:'🚛', label:'Active Collectors', value:'320', change:'+5%', color:'#dcfce7', textColor:'#16a34a' },
+    { icon:'📦', label:'Total Pickups', value:'24,680', change:'+18%', color:'#ede9fe', textColor:'#7c3aed' },
+    { icon:'💰', label:'Total Transactions', value:'₹68.4L', change:'+22%', color:'#fef9c3', textColor:'#ca8a04' },
+  ];
+
+  const handleUpdateRate = () => {
+    setRates(prev => prev.map(r => r.id === editingRate.id ? {...r, price: parseFloat(newPrice) || r.price} : r));
+    setEditingRate(null);
+    setNewPrice('');
+  };
+
+  return (
+    <div className="pt-16 min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p className="text-gray-500 mt-1">ScrapMithra platform overview & management</p>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-amber-100 text-amber-700 rounded-xl text-sm font-medium border border-amber-200">
+            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+            Admin Mode
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {adminStats.map((s, i) => (
+            <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 card-hover">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3" style={{background:s.color}}>{s.icon}</div>
+              <div className="text-2xl font-bold" style={{color:s.textColor}}>{s.value}</div>
+              <div className="text-xs text-gray-500 mt-0.5">{s.label}</div>
+              <div className="text-xs font-medium text-green-600 mt-1">📈 {s.change} this month</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {[{v:'rates',label:'⚡ Scrap Rates'},{v:'collectors',label:'🚛 Collectors'},{v:'pickups',label:'📦 Pickups'},{v:'customers',label:'👥 Customers'}].map(t => (
+            <button key={t.v} onClick={() => setActiveTab(t.v)}
+              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${activeTab === t.v ? 'bg-primary-600 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-primary-300'}`}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Rate Management */}
+        {activeTab === 'rates' && (
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <h2 className="font-bold text-gray-800 flex items-center gap-2"><Icon name="zap" size={18} color="#16a34a" /> Scrap Rate Management</h2>
+              <button className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 transition-all">
+                <Icon name="plus" size={16} /> Add Material
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>
+                    {['Material','Category','Current Rate','Unit','Change','Status','Actions'].map(h => (
+                      <th key={h} className="text-left px-4 py-3 text-gray-500 font-medium text-xs uppercase tracking-wide">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {rates.map(rate => (
+                    <tr key={rate.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3"><span className="mr-2">{rate.icon}</span>{rate.name}</td>
+                      <td className="px-4 py-3"><span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs">{rate.category}</span></td>
+                      <td className="px-4 py-3 font-bold text-primary-700">₹{rate.price}</td>
+                      <td className="px-4 py-3 text-gray-500">/{rate.unit}</td>
+                      <td className="px-4 py-3">
+                        <span className={`flex items-center gap-1 text-xs font-medium ${rate.changeDir === 'up' ? 'text-green-600' : rate.changeDir === 'down' ? 'text-red-500' : 'text-gray-400'}`}>
+                          {rate.changeDir === 'up' ? '↑' : rate.changeDir === 'down' ? '↓' : '→'} {rate.changePercentage}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${rate.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                          {rate.active ? 'Active' : 'Inactive'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-2">
+                          <button onClick={() => { setEditingRate(rate); setNewPrice(String(rate.price)); }}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><Icon name="edit" size={14} /></button>
+                          <button onClick={() => setRates(prev => prev.map(r => r.id === rate.id ? {...r, active:!r.active} : r))}
+                            className="p-2 text-gray-400 hover:bg-gray-100 rounded-lg transition-colors"><Icon name="settings" size={14} /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Collectors tab */}
+        {activeTab === 'collectors' && (
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100"><h2 className="font-bold text-gray-800">Collectors Management</h2></div>
+            <div className="divide-y divide-gray-50">
+              {MOCK_COLLECTORS.map(col => (
+                <div key={col.id} className="flex items-center justify-between px-6 py-4 hover:bg-gray-50">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold" style={{background:col.color}}>{col.image}</div>
+                    <div>
+                      <div className="font-medium text-gray-800">{col.name}</div>
+                      <div className="text-xs text-gray-400 flex items-center gap-2 mt-0.5">
+                        <span><Icon name="star" size={10} color="#f59e0b" className="inline" /> {col.rating}</span>
+                        <span>·</span><span>{col.reviews} reviews</span>
+                        <span>·</span><span>{col.materials.join(', ')}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xs font-medium px-3 py-1 rounded-full ${col.available ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      {col.available ? 'Available' : 'Offline'}
+                    </span>
+                    <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"><Icon name="edit" size={14} /></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Pickups tab */}
+        {activeTab === 'pickups' && (
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100"><h2 className="font-bold text-gray-800">Recent Pickups</h2></div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50">
+                  <tr>{['Booking ID','Customer','Scrap','Date','Est. Value','Status'].map(h => <th key={h} className="text-left px-4 py-3 text-gray-500 font-medium text-xs">{h}</th>)}</tr>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {MOCK_PICKUPS.map(p => (
+                    <tr key={p.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3 font-medium text-primary-600">{p.id}</td>
+                      <td className="px-4 py-3 text-gray-600">Priya Krishnan</td>
+                      <td className="px-4 py-3 text-gray-600">{p.scrap.map(s => s.name).join(', ')}</td>
+                      <td className="px-4 py-3 text-gray-600">{p.date}</td>
+                      <td className="px-4 py-3 font-bold text-primary-700">₹{p.estValue.toLocaleString('en-IN')}</td>
+                      <td className="px-4 py-3"><span className={`px-2 py-1 rounded-full text-xs font-medium ${p.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>{p.status}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'customers' && (
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+            <h2 className="font-bold text-gray-800 mb-4">Customer Management</h2>
+            <div className="space-y-4">
+              {[{name:'Priya Krishnan',phone:'9876543210',pickups:5,earnings:'₹4,114',since:'Aug 2026'},{name:'Vijay Shankar',phone:'9845001234',pickups:3,earnings:'₹2,890',since:'Sep 2026'},{name:'Anita Pillai',phone:'9746123456',pickups:8,earnings:'₹7,250',since:'Jul 2026'}].map((c,i) => (
+                <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center text-primary-700 font-bold text-sm">{c.name[0]}{c.name.split(' ')[1][0]}</div>
+                    <div>
+                      <div className="font-medium text-gray-800">{c.name}</div>
+                      <div className="text-xs text-gray-400">{c.phone} · Since {c.since}</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-primary-700">{c.earnings}</div>
+                    <div className="text-xs text-gray-400">{c.pickups} pickups</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Edit rate modal */}
+        {editingRate && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+            <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl">
+              <h3 className="font-bold text-gray-900 mb-5 text-lg">Update Market Rate</h3>
+              <div className="mb-4">
+                <div className="text-sm text-gray-500 mb-1">Material</div>
+                <div className="font-semibold text-gray-800">{editingRate.icon} {editingRate.name}</div>
+              </div>
+              <div className="mb-4">
+                <div className="text-sm text-gray-500 mb-1">Current Rate</div>
+                <div className="font-bold text-primary-700">₹{editingRate.price}/{editingRate.unit}</div>
+              </div>
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">New Rate (₹)</label>
+                <input type="number" value={newPrice} onChange={e => setNewPrice(e.target.value)} min="0"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-medium" />
+              </div>
+              <div className="flex gap-3">
+                <button onClick={() => setEditingRate(null)} className="flex-1 py-3 border border-gray-200 text-gray-600 font-medium rounded-2xl hover:bg-gray-50">Cancel</button>
+                <button onClick={handleUpdateRate} className="flex-1 py-3 bg-primary-600 text-white font-semibold rounded-2xl hover:bg-primary-700">Update Rate</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// SERVICES PAGE
+// ─────────────────────────────────────────────
+const ServicesPage = ({ setPage }) => {
+  const categories = [
+    { name:'Paper', emoji:'📰', color:'#dcfce7', textColor:'#15803d', desc:'Old newspapers, books, magazines, office paper, stationery.', items:['Newspapers','Books & Magazines','Office Paper','Kraft Paper'], rates:['₹14/kg','₹12/kg','₹15/kg','₹10/kg'] },
+    { name:'Cardboard', emoji:'📦', color:'#fef9c3', textColor:'#a16207', desc:'Corrugated cardboard boxes, cartons, packaging material.', items:['Corrugated Cardboard','Carton Boxes','Duplex Board'], rates:['₹8/kg','₹7/kg','₹9/kg'] },
+    { name:'Metal', emoji:'⚙️', color:'#dbeafe', textColor:'#1d4ed8', desc:'Iron, steel, aluminium, copper, brass, and other metals.', items:['Iron','Steel','Aluminium','Copper','Brass'], rates:['₹30/kg','₹45/kg','₹160/kg','₹750/kg','₹400/kg'] },
+    { name:'Plastic', emoji:'🍶', color:'#fce7f3', textColor:'#be185d', desc:'PET bottles, plastic containers, HDPE, LDPE, PP items.', items:['PET Bottles','Mixed Plastic','Hard Plastic'], rates:['₹10/kg','₹8/kg','₹12/kg'] },
+    { name:'E-Waste', emoji:'💻', color:'#ede9fe', textColor:'#6d28d9', desc:'Phones, laptops, computers, printers, cables and electronics.', items:['Laptop','Smartphone','Desktop CPU','Printer','Cables'], rates:['₹500/pc','₹100/pc','₹250/pc','₹200/pc','₹50/kg'] },
+    { name:'Appliances', emoji:'🧊', color:'#ffedd5', textColor:'#c2410c', desc:'Refrigerators, washing machines, microwaves, fans, ACs.', items:['Refrigerator','Washing Machine','Microwave','Air Conditioner','Ceiling Fan'], rates:['₹1,000/pc','₹800/pc','₹250/pc','₹1,200/pc','₹150/pc'] },
+    { name:'Batteries', emoji:'🔋', color:'#ccfbf1', textColor:'#0f766e', desc:'Car batteries, inverter batteries, mobile batteries.', items:['Car Battery','Inverter Battery'], rates:['₹40/pc','₹40/pc'] },
+    { name:'Glass & Other', emoji:'🍾', color:'#f3f4f6', textColor:'#374151', desc:'Glass bottles, rubber, and other recyclable materials.', items:['Glass Bottles','Rubber Tyres'], rates:['₹3/kg','₹6/kg'] },
+  ];
+  return (
+    <div className="pt-16 fade-enter">
+      <div className="bg-white border-b border-gray-200 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900">Our Services</h1>
+          <p className="text-gray-500 mt-2">All recyclable scrap categories we accept for doorstep pickup.</p>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {categories.map((cat, i) => (
+            <div key={i} className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden card-hover">
+              <div className="p-5" style={{background:cat.color}}>
+                <div className="text-4xl mb-2">{cat.emoji}</div>
+                <h3 className="font-bold text-xl" style={{color:cat.textColor}}>{cat.name}</h3>
+              </div>
+              <div className="p-5">
+                <p className="text-sm text-gray-500 mb-4">{cat.desc}</p>
+                <div className="space-y-2 mb-4">
+                  {cat.items.map((item, j) => (
+                    <div key={j} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-700 flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-primary-500 inline-block"></span>{item}</span>
+                      <span className="font-semibold text-primary-700">{cat.rates[j]}</span>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => setPage('rates')} className="w-full py-2.5 text-sm font-medium text-primary-600 bg-primary-50 rounded-2xl hover:bg-primary-100 transition-colors">
+                  View All Rates →
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// HOW IT WORKS PAGE
+// ─────────────────────────────────────────────
+const HowItWorksPage = ({ setPage }) => {
+  const steps = [
+    { num:'01', emoji:'📱', title:'Download & Register', desc:'Sign up on ScrapMithra with your mobile number. Verification takes less than a minute.', color:'#dcfce7' },
+    { num:'02', emoji:'📋', title:'Select Your Scrap', desc:'Browse our categories and select the type and approximate quantity of scrap you want to sell.', color:'#dbeafe' },
+    { num:'03', emoji:'💡', title:'Get Instant Estimate', desc:'Our calculator instantly shows you an estimated value based on current market rates.', color:'#fef9c3' },
+    { num:'04', emoji:'📍', title:'Share Your Location', desc:'Enter your address or use GPS detection. Your location is secure and only shared with your assigned collector.', color:'#ede9fe' },
+    { num:'05', emoji:'📅', title:'Choose Time & Date', desc:'Select a convenient pickup date and time slot that works best for you.', color:'#fce7f3' },
+    { num:'06', emoji:'✅', title:'Booking Confirmed', desc:'Receive instant confirmation with a unique Booking ID. Track your pickup status in real-time.', color:'#ccfbf1' },
+    { num:'07', emoji:'🚛', title:'Collector Arrives', desc:'A verified ScrapMithra collector arrives at your doorstep within your chosen slot.', color:'#ffedd5' },
+    { num:'08', emoji:'⚖️', title:'Digital Weighing', desc:'Scrap is weighed using calibrated digital equipment at your doorstep. Results shown instantly.', color:'#dcfce7' },
+    { num:'09', emoji:'💰', title:'Transparent Payment', desc:'See the complete breakdown. Get paid via UPI, cash, or bank transfer — your choice.', color:'#dbeafe' },
+    { num:'10', emoji:'🌱', title:'See Your Impact', desc:'Track how much CO₂ you avoided and how many resources were saved by your recycling.', color:'#dcfce7' },
+  ];
+  return (
+    <div className="pt-16 fade-enter min-h-screen bg-gray-50">
+      <div className="bg-white border-b border-gray-200 py-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">How ScrapMithra Works</h1>
+          <p className="text-gray-500 max-w-xl mx-auto">We've made scrap selling as easy as ordering food online. Here's your complete guide.</p>
+        </div>
+      </div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="space-y-4">
+          {steps.map((step, i) => (
+            <div key={i} className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 card-hover flex gap-6 items-start">
+              <div className="flex-shrink-0">
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl" style={{background:step.color}}>
+                  {step.emoji}
+                </div>
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-xs font-bold text-primary-600 bg-primary-50 px-3 py-1 rounded-full">Step {step.num}</span>
+                </div>
+                <h3 className="font-bold text-gray-800 text-lg mb-2">{step.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{step.desc}</p>
+              </div>
+              {i < steps.length - 1 && <div className="hidden sm:block text-2xl text-primary-300 self-center">→</div>}
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <button onClick={() => setPage('booking')} className="btn-primary px-10 py-4 bg-primary-600 text-white font-bold rounded-2xl text-lg shadow-lg hover:bg-primary-700 transition-all">
+            Book Your First Pickup →
+          </button>
+          <p className="text-sm text-gray-400 mt-3">Free pickup. No hidden charges.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// IMPACT PAGE
+// ─────────────────────────────────────────────
+const ImpactPage = () => {
+  const [material, setMaterial] = useState('Paper');
+  const [quantity, setQuantity] = useState(10);
+
+  const ecoRate = ECO_RATES[material] || ECO_RATES['Paper'];
+  const co2 = (ecoRate.co2 * quantity).toFixed(1);
+  const water = (ecoRate.water * quantity).toFixed(0);
+  const energy = (ecoRate.energy * quantity).toFixed(1);
+  const trees = (ecoRate.trees * quantity).toFixed(2);
+
+  const globalStats = [
+    { emoji:'♻️', label:'Total Scrap Recycled', val:'128,450 kg' },
+    { emoji:'🌿', label:'CO₂ Avoided', val:'141 tonnes' },
+    { emoji:'💧', label:'Water Saved', val:'~12.8 Lakh L' },
+    { emoji:'🌳', label:'Trees Equivalent', val:'720+' },
+    { emoji:'⚡', label:'Energy Saved', val:'51,380 kWh' },
+    { emoji:'👥', label:'Households Served', val:'8,420+' },
+  ];
+
+  return (
+    <div className="pt-16 fade-enter min-h-screen bg-gray-50">
+      <div className="bg-primary-900 text-white py-14">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-3">Your Scrap Makes a Difference 🌱</h1>
+          <p className="text-green-300">Every kilogram recycled through ScrapMithra contributes to a cleaner planet.</p>
+        </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Eco calculator */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Calculate Your Environmental Impact</h2>
+          <p className="text-gray-500 mb-6 text-sm">See how much your recycling contributes to the environment.</p>
+          <div className="grid sm:grid-cols-2 gap-5 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Material Type</label>
+              <select value={material} onChange={e => setMaterial(e.target.value)} className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm bg-white">
+                {Object.keys(ECO_RATES).map(m => <option key={m}>{m}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Quantity (kg)</label>
+              <input type="number" value={quantity} onChange={e => setQuantity(parseFloat(e.target.value) || 0)} min="1" className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { emoji:'🌿', label:'CO₂ Avoided', val:`${co2} kg`, color:'#dcfce7' },
+              { emoji:'💧', label:'Water Saved', val:`${parseInt(water).toLocaleString('en-IN')} L`, color:'#dbeafe' },
+              { emoji:'⚡', label:'Energy Saved', val:`${energy} kWh`, color:'#fef9c3' },
+              { emoji:'♻️', label:'Waste Diverted', val:`${quantity} kg`, color:'#ede9fe' },
+            ].map((item, i) => (
+              <div key={i} className="rounded-2xl p-5 text-center" style={{background:item.color}}>
+                <div className="text-3xl mb-2">{item.emoji}</div>
+                <div className="text-xl font-bold text-gray-800">{item.val}</div>
+                <div className="text-xs text-gray-500 mt-1">{item.label}</div>
+              </div>
+            ))}
+          </div>
+          {parseFloat(trees) > 0 && (
+            <div className="mt-4 p-4 bg-green-50 rounded-2xl text-center">
+              <span className="text-green-700 font-medium">🌳 Trees Equivalent Saved: <strong>{trees}</strong></span>
+            </div>
+          )}
+          <p className="text-xs text-gray-400 mt-4 text-center">* Estimates based on standard recycling impact factors. Actual impact may vary.</p>
+        </div>
+
+        {/* Global stats */}
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">ScrapMithra's Collective Impact</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {globalStats.map((s, i) => (
+              <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center card-hover">
+                <div className="text-3xl mb-2">{s.emoji}</div>
+                <div className="text-xl font-bold text-primary-700"><AnimatedCounter target={parseInt(s.val.replace(/[^0-9]/g,''))} /></div>
+                <div className="text-xs text-gray-500 mt-1">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Impact visual bars */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+          <h2 className="font-bold text-gray-800 mb-5">Scrap Impact by Category</h2>
+          <div className="space-y-4">
+            {Object.entries(ECO_RATES).map(([cat, rates]) => (
+              <div key={cat} className="flex items-center gap-4">
+                <span className="text-sm text-gray-600 w-24 flex-shrink-0">{cat}</span>
+                <div className="flex-1 bg-gray-100 rounded-full h-3 overflow-hidden">
+                  <div className="h-full rounded-full progress-bar transition-all duration-700" style={{width:`${Math.min(rates.co2 * 40, 100)}%`}}></div>
+                </div>
+                <span className="text-xs text-gray-400 w-20 text-right">{rates.co2} kg CO₂/kg</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// ABOUT PAGE
+// ─────────────────────────────────────────────
+const AboutPage = ({ setPage }) => (
+  <div className="pt-16 fade-enter min-h-screen">
+    {/* Hero */}
+    <div className="gradient-hero py-16 text-center">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="mb-6"><Logo size="lg" /></div>
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">Building a Cleaner<br /><span className="text-primary-600">Circular Economy.</span></h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">ScrapMithra is a technology platform connecting households, businesses and scrap collectors to make recycling more accessible and transparent.</p>
+      </div>
+    </div>
+
+    {/* Mission & Vision */}
+    <div className="py-16 bg-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8">
+        <div className="bg-primary-50 rounded-3xl p-8">
+          <div className="w-12 h-12 rounded-2xl bg-primary-600 flex items-center justify-center mb-4">
+            <Icon name="zap" size={24} color="white" />
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-3">Our Mission</h2>
+          <p className="text-gray-600 leading-relaxed italic text-lg">"Make responsible waste disposal as easy as ordering a service online."</p>
+          <p className="text-gray-500 text-sm mt-4">We connect scrap sellers with verified collectors through a transparent, digitally-tracked platform — making recycling simple, safe, and rewarding.</p>
+        </div>
+        <div className="bg-primary-900 rounded-3xl p-8 text-white">
+          <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-4">
+            <Icon name="globe" size={24} color="white" />
+          </div>
+          <h2 className="text-xl font-bold mb-3">Our Vision</h2>
+          <p className="text-green-300 leading-relaxed italic text-lg">"A future where every recyclable material finds its way back into the circular economy."</p>
+          <p className="text-green-400 text-sm mt-4">We envision cities where waste is a resource, not a problem. ScrapMithra is building the infrastructure to make that a reality.</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Values */}
+    <div className="py-12 bg-gray-50">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Our Core Values</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[
+            { icon:'shield', title:'Trust & Transparency', desc:'Every transaction is digitally recorded. All collectors are verified. No surprises.' },
+            { icon:'leaf', title:'Sustainability First', desc:'Every feature is designed to make recycling easier and maximize eco-impact.' },
+            { icon:'zap', title:'Technology Driven', desc:'Smart matching, digital weighing, real-time tracking — tech at every step.' },
+            { icon:'users', title:'Community Powered', desc:'We support local scrap collectors and help them grow their businesses.' },
+            { icon:'globe', title:'Circular Economy', desc:'We believe waste is just a resource in the wrong place. We fix that.' },
+            { icon:'award', title:'Quality of Service', desc:'Rated 4.8/5 by customers. We strive for excellence in every pickup.' },
+          ].map((val, i) => (
+            <div key={i} className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 card-hover">
+              <div className="w-10 h-10 rounded-2xl bg-primary-100 flex items-center justify-center mb-3">
+                <Icon name={val.icon} size={20} color="#16a34a" />
+              </div>
+              <h3 className="font-bold text-gray-800 mb-2">{val.title}</h3>
+              <p className="text-sm text-gray-500">{val.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Trust & Safety */}
+    <div className="py-12 bg-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">Trust & Safety</h2>
+        <p className="text-gray-500 text-center mb-8">Your safety and satisfaction are our top priorities.</p>
+        <div className="grid sm:grid-cols-2 gap-5">
+          {[
+            {emoji:'✅', title:'Verified Collectors', desc:'All collectors undergo identity verification, address proof and background check before onboarding.'},
+            {emoji:'⚖️', title:'Transparent Weighing', desc:'Digital weighing machines calibrated and certified. Results shared with customers in real-time.'},
+            {emoji:'💰', title:'Clear Pricing', desc:'Rates published daily. You always know the rate before the collector arrives.'},
+            {emoji:'📄', title:'Digital Records', desc:'Every pickup generates a digital receipt. Full transaction history available in your dashboard.'},
+            {emoji:'💬', title:'Customer Support', desc:'Reach us at support@scrapmithra.in or call our helpline. We respond within 2 hours.'},
+            {emoji:'🚨', title:'Report an Issue', desc:'If anything goes wrong, report immediately via the app or website. We take all complaints seriously.'},
+          ].map((item, i) => (
+            <div key={i} className="flex gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100">
+              <span className="text-2xl flex-shrink-0">{item.emoji}</span>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-1">{item.title}</h3>
+                <p className="text-sm text-gray-500">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* CTA */}
+    <div className="py-14 bg-primary-600 text-white text-center">
+      <h2 className="text-3xl font-bold mb-4">Ready to make a difference?</h2>
+      <p className="text-green-200 mb-8 max-w-xl mx-auto">Join 8,420+ households already turning their scrap into value and environmental impact.</p>
+      <button onClick={() => setPage('booking')} className="px-10 py-4 bg-white text-primary-700 font-bold rounded-2xl text-lg hover:bg-primary-50 transition-all shadow-lg">
+        Book Your First Pickup →
+      </button>
+    </div>
+  </div>
+);
+
+// ─────────────────────────────────────────────
+// MOBILE BOTTOM NAV
+// ─────────────────────────────────────────────
+const MobileBottomNav = ({ currentPage, setPage }) => {
+  const items = [
+    { icon:'home', label:'Home', page:'home' },
+    { icon:'bar_chart', label:'Rates', page:'rates' },
+    { icon:'truck', label:'Book', page:'booking', primary:true },
+    { icon:'user', label:'Profile', page:'dashboard' },
+  ];
+  return (
+    <div className="mobile-bottom-nav flex items-center justify-around px-2 py-2 pb-safe">
+      {items.map(item => (
+        <button key={item.page} onClick={() => setPage(item.page)}
+          className={`flex flex-col items-center gap-1 px-4 py-1.5 rounded-xl transition-all ${item.primary ? 'bg-primary-600 text-white px-5 py-2 shadow-lg -mt-4 rounded-2xl' : currentPage === item.page ? 'text-primary-600' : 'text-gray-400'}`}>
+          <Icon name={item.icon} size={item.primary ? 24 : 20} color={item.primary ? 'white' : currentPage === item.page ? '#16a34a' : '#9ca3af'} />
+          <span className={`text-xs font-medium ${item.primary ? 'text-white' : ''}`}>{item.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────
+// MAIN APP
+// ─────────────────────────────────────────────
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState('customer');
+
+  const setPage = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const renderPage = () => {
+    switch(currentPage) {
+      case 'home': return <HomePage setPage={setPage} />;
+      case 'rates': return <RatesPage setPage={setPage} />;
+      case 'booking': return <BookingPage setPage={setPage} />;
+      case 'tracking': return <TrackingPage setPage={setPage} />;
+      case 'dashboard': return <CustomerDashboard setPage={setPage} />;
+      case 'collector': return <CollectorDashboard setPage={setPage} />;
+      case 'admin': return <AdminDashboard setPage={setPage} />;
+      case 'services': return <ServicesPage setPage={setPage} />;
+      case 'howitworks': return <HowItWorksPage setPage={setPage} />;
+      case 'impact': return <ImpactPage setPage={setPage} />;
+      case 'about': return <AboutPage setPage={setPage} />;
+      case 'login': return <LoginPage setPage={setPage} setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />;
+      default: return <HomePage setPage={setPage} />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen">
+      <DemoBanner />
+      <Navbar currentPage={currentPage} setPage={setPage} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userRole={userRole} setUserRole={setUserRole} />
+      <main className="pb-20 md:pb-0">
+        {renderPage()}
+      </main>
+      {currentPage !== 'login' && <Footer setPage={setPage} />}
+      <MobileBottomNav currentPage={currentPage} setPage={setPage} />
+    </div>
+  );
+};
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quantum-Inspired QDS Threat Detection Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    .row { display: flex; gap: 18px; flex-wrap: wrap; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 16px; min-width: 320px; }
+    label { display:block; margin-top: 10px; font-size: 14px; }
+    select,input { width: 100%; padding: 8px; margin-top: 6px; }
+    button { padding: 10px 14px; margin-top: 14px; cursor: pointer; }
+    pre { background:#f7f7f7; padding: 12px; border-radius: 8px; overflow:auto; }
+    .ok { color: #0a7a2f; font-weight: 700; }
+    .bad { color: #b00020; font-weight: 700; }
+    .bar { height: 18px; background:#e9ecef; border-radius: 999px; overflow:hidden; }
+    .bar > div { height:100%; background:#0d6efd; width:0%; transition: width .25s; }
+    table { border-collapse: collapse; width:100%; }
+    td,th { border-bottom: 1px solid #eee; padding: 6px; text-align:left; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h2>Quantum-Inspired Cyber Threat Detection for QDS (Demo)</h2>
+
+  <div class="row">
+    <div class="card">
+      <h3>Run Simulation</h3>
+
+      <label>Scenario</label>
+      <select id="scenario">
+        <option value="legitimate">Legitimate</option>
+        <option value="forgery">Forgery</option>
+        <option value="impersonation">Impersonation</option>
+        <option value="replay">Replay</option>
+        <option value="channel_tampering">Channel Tampering</option>
+      </select>
+
+      <label>Message Bit</label>
+      <select id="messageBit">
+        <option value="0">0</option>
+        <option value="1" selected>1</option>
+      </select>
+
+      <label>Shots</label>
+      <input id="shots" type="number" value="1000" min="100" step="100" />
+
+      <label>Threshold</label>
+      <input id="threshold" type="number" value="0.85" min="0" max="1" step="0.01" />
+
+      <button onclick="run()">Run & Verify</button>
+
+      <p id="statusLine"></p>
+      <div class="bar"><div id="confBar"></div></div>
+      <p><b>Confidence:</b> <span id="confText">-</span></p>
+    </div>
+
+    <div class="card">
+      <h3>Measurement Counts</h3>
+      <div id="countsTable"></div>
+      <h4>Raw JSON (for judges)</h4>
+      <pre id="rawJson">{}</pre>
+    </div>
+  </div>
+
+<script>
+const API_URL = "http://127.0.0.1:8000/run";
+
+function renderCountsTable(counts){
+  const keys = Object.keys(counts).sort();
+  let html = "<table><tr><th>Outcome</th><th>Count</th></tr>";
+  for (const k of keys) html += `<tr><td>${k}</td><td>${counts[k]}</td></tr>`;
+  html += "</table>";
+  document.getElementById("countsTable").innerHTML = html;
+}
+
+async function run(){
+  const scenario = document.getElementById("scenario").value;
+  const message_bit = parseInt(document.getElementById("messageBit").value, 10);
+  const shots = parseInt(document.getElementById("shots").value, 10);
+  const threshold = parseFloat(document.getElementById("threshold").value);
+
+  document.getElementById("statusLine").textContent = "Running...";
+  document.getElementById("rawJson").textContent = "{}";
+
+  const payload = { scenario, message_bit, shots, threshold };
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+
+  const statusLine = document.getElementById("statusLine");
+  const isOk = (data.status || "").includes("ACCEPTED");
+
+  statusLine.innerHTML = `<b>Status:</b> <span class="${isOk ? "ok":"bad"}">${data.status}</span>`;
+  document.getElementById("confText").textContent = (data.confidence * 100).toFixed(2) + "%";
+  document.getElementById("confBar").style.width = (data.confidence * 100).toFixed(2) + "%";
+
+  renderCountsTable(data.counts);
+  document.getElementById("rawJson").textContent = JSON.stringify(data, null, 2);
+}
+</script>
+</body>
+</html>
